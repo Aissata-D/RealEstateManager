@@ -31,9 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private void configureTextViewQuantity(){
         int quantity = Utils.convertDollarToEuro(100);
         String date = Utils.getTodayDate();
+        boolean isNetworkAvailable = Utils.isNetworkAvailable(this);
+
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText( String.valueOf(quantity));
         //this.textViewQuantity.setText(date);
+       // this.textViewQuantity.setText(String.valueOf(isNetworkAvailable));
 
     }
 }
