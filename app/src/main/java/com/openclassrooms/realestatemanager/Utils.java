@@ -19,8 +19,15 @@ public class Utils {
      * @param dollars
      * @return
      */
-    public static int convertDollarToEuro(int dollars){
+    // 1 euro = 1,01 dolar, in july 2022
+    /*public static int convertDollarToEuro(int dollars){
         return (int) Math.round(dollars * 0.812);
+    }*/
+    public static int convertDollarToEuro(int dollars){
+        return (int) Math.round(dollars * 0.99);
+    }
+    public static int convertEuroToDollar(int euros){
+        return (int) Math.round(euros * 1.01);
     }
 
     /**
@@ -28,8 +35,14 @@ public class Utils {
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
      * @return
      */
+   /* OLD METHOD
     public static String getTodayDate(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        return dateFormat.format(new Date());
+    }*/
+    // NEW METHOD
+    public static String getTodayDate(){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(new Date());
     }
 

@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewMain;
@@ -28,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureTextViewQuantity(){
         int quantity = Utils.convertDollarToEuro(100);
+        String date = Utils.getTodayDate();
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText( String.valueOf(quantity));
+        //this.textViewQuantity.setText(date);
+
     }
 }
