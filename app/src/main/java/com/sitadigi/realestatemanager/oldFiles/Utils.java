@@ -1,11 +1,11 @@
-package com.openclassrooms.realestatemanager;
+package com.sitadigi.realestatemanager.oldFiles;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,8 +28,12 @@ public class Utils {
     public static int convertDollarToEuro(int dollars){
         return (int) Math.round(dollars * 0.99);
     }
-    public static int convertEuroToDollar(int euros){
-        return (int) Math.round(euros * 1.01);
+
+    public static double convertEuroToDollar(double euros){
+        double dollars = euros * 1.01;
+        DecimalFormat df = new DecimalFormat("0.00"); // import java.text.DecimalFormat;
+        df.format(dollars);
+        return (double)dollars;
     }
 
     /**

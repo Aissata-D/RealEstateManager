@@ -1,13 +1,13 @@
-package com.openclassrooms.realestatemanager;
+package com.sitadigi.realestatemanager.oldFiles;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import java.util.Date;
+//import fr.sitadigi.realestatemanager.R;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivityOld extends AppCompatActivity {
+/*
     private TextView textViewMain;
     private TextView textViewQuantity;
 
@@ -38,5 +38,5 @@ public class MainActivity extends AppCompatActivity {
         //this.textViewQuantity.setText(date);
        // this.textViewQuantity.setText(String.valueOf(isNetworkAvailable));
 
-    }
+    }*/
 }

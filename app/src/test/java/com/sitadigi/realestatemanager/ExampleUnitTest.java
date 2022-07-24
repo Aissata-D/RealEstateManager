@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.sitadigi.realestatemanager;
 
 import org.junit.Test;
 
