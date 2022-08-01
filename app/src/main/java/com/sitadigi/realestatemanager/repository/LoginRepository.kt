@@ -1,6 +1,6 @@
 package com.sitadigi.realestatemanager.repository
 
-import com.sitadigi.realestatemanager.dao.UserDatabaseDao
+import com.sitadigi.realestatemanager.dao.UserDao
 import com.sitadigi.realestatemanager.model.UserEntity
 
 /**
@@ -8,7 +8,7 @@ import com.sitadigi.realestatemanager.model.UserEntity
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(private val dao: UserDatabaseDao) {
+class LoginRepository(private val dao: UserDao) {
 
 
     init {

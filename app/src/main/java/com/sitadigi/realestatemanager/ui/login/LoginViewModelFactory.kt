@@ -16,7 +16,7 @@ class LoginViewModelFactory(/*private val repository: LoginRepository
    // private val repository: LoginRepository = TODO()
    // val application = requireNotNull(this).application
 
-   val dao = UserDatabase.getInstance(activity.applicationContext).userDatabaseDao
+   val dao = UserDatabase.getInstance(activity.applicationContext).userDao
    val repository = LoginRepository(dao)
 
 

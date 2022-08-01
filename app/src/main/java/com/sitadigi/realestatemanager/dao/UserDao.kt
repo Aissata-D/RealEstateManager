@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.sitadigi.realestatemanager.model.UserEntity
 
 @Dao
-interface UserDatabaseDao {
+interface UserDao {
     //Create a new user
     @Insert
     suspend fun insert(userEntity: UserEntity)
