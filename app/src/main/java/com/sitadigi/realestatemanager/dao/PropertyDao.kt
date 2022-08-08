@@ -12,6 +12,7 @@ interface PropertyDao {
         @Insert
         suspend fun insert(property: Property)
 
+
         @Query("SELECT * FROM Property_table")
         suspend fun getAllProperty(): List<Property>
 

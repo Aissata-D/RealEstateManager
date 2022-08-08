@@ -10,10 +10,22 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.sitadigi.realestatemanager.R
+import com.sitadigi.realestatemanager.dao.PictureDao
+import com.sitadigi.realestatemanager.dao.PropertyDao
+import com.sitadigi.realestatemanager.database.UserDatabase
 import com.sitadigi.realestatemanager.databinding.ActivityMainBinding
+import com.sitadigi.realestatemanager.model.PictureInter
+import com.sitadigi.realestatemanager.model.Property
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 //import fr.sitadigi.realestatemanager.databinding.ActivityMainBinding
 
@@ -23,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var  imgAdd : ImageView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,4 +86,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }

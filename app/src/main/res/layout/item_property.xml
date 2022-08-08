@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/item_property_recyclerview_img"
+        android:layout_width="112dp"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:src="@drawable/img_property_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_property_type"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="left"
+        android:hint="Property Type"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/item_property_recyclerview_img"
+        app:layout_constraintTop_toTopOf="@+id/item_property_recyclerview_img" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_property_location"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="left"
+        android:hint="Location"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/item_property_recyclerview_img"
+        app:layout_constraintTop_toBottomOf="@id/item_property_type" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/item_property_price"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="left"
+        android:hint="120000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/item_property_recyclerview_img"
+        app:layout_constraintTop_toBottomOf="@id/item_property_location" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

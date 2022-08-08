@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.dao.PictureDao
 import com.sitadigi.realestatemanager.database.UserDatabase
@@ -34,7 +33,7 @@ class AddPropertyActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_property2)
-         pictureDao = UserDatabase.getInstance(this).pictureDao
+         pictureDao = UserDatabase.getInstance(this)?.pictureDao!!
 
         imgProperty = findViewById(R.id.img_property)
         editDescription = findViewById(R.id.img_description)

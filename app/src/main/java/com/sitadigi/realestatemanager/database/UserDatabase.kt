@@ -21,7 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-@Database(entities = [UserEntity::class, Status::class, Picture::class, Property::class], version = 5, exportSchema = false)
+@Database(entities = [UserEntity::class, Status::class, Picture::class, Property::class],
+        version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class UserDatabase : RoomDatabase() {
 
@@ -46,18 +47,20 @@ abstract class UserDatabase : RoomDatabase() {
             @Volatile
             private var INSTANCE: UserDatabase? = null
 
-            fun getInstance(context: Context): UserDatabase {
+            fun getInstance(context: Context?): UserDatabase? {
                 synchronized(this) {
 
                     var instance = INSTANCE
 
                     if (instance == null) {
-                        instance = Room.databaseBuilder(
-                                context.applicationContext,
-                                UserDatabase::class.java,
-                                "database1"
-                        ).addCallback(prepopulateDatabase())
-                                .build()
+                        if (context != null) {
+                            instance = Room.databaseBuilder(
+                                    context.applicationContext,
+                                    UserDatabase::class.java,
+                                    "database11"
+                            ).addCallback(prepopulateDatabase())
+                                    .build()
+                        }
 
                         INSTANCE = instance
                     }

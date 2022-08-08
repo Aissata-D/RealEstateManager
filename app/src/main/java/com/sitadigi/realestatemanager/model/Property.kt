@@ -44,6 +44,6 @@ data class Property(
         @ColumnInfo(name = "property_email_of_real_estate_agent")
         val propertyEmailOfRealEstateAgent: String,
         @ColumnInfo(name = "property_list_of_pictures")
-        val propertyListOfPictures: List<PictureInter>
+        val propertyListOfPictures: List<String>
 
 )

@@ -38,6 +38,20 @@ class Converters {
         val type = object : TypeToken<List<PictureInter>>() {}.type
         return gson.fromJson(value, type)
     }
+    @TypeConverter
+    fun fromGroupTaskMemberList2(value: List<String>): String {
+        val gson = Gson()
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.toJson(value, type)
+    }
+
+    @TypeConverter
+    fun toGroupTaskMemberList2(value: String): List<String> {
+        val gson = Gson()
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
 
     @TypeConverter
     fun toDate(timestamp: Long?): Date? {
