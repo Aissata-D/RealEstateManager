@@ -15,7 +15,7 @@ class PictureRepository(private val dao: PictureDao) {
         return dao.getAllPicture()
     }
 
-    suspend fun createPicture(picture: Picture) {
+    suspend fun insert(picture: Picture) {
         return dao.insert(picture)
     }
 

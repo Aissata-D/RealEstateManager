@@ -2,6 +2,7 @@ package com.sitadigi.realestatemanager.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -10,22 +11,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.sitadigi.realestatemanager.R
-import com.sitadigi.realestatemanager.dao.PictureDao
-import com.sitadigi.realestatemanager.dao.PropertyDao
-import com.sitadigi.realestatemanager.database.UserDatabase
 import com.sitadigi.realestatemanager.databinding.ActivityMainBinding
-import com.sitadigi.realestatemanager.model.PictureInter
-import com.sitadigi.realestatemanager.model.Property
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlin.math.log
 
 //import fr.sitadigi.realestatemanager.databinding.ActivityMainBinding
 
@@ -33,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var  imgSearch : ImageView
     //private lateinit var  imgEdit : ImageView
     //private lateinit var  imgAdd : ImageView
+    var userEmail = ""
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
@@ -40,6 +31,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        val bundle = intent.extras
+
+        if (bundle != null) {
+            val s = bundle["USER_EMAIL"] as String?
+            if (s != null) {
+                userEmail = s
+                Log.e("TAG", "onCreateMAIN: email: $userEmail, bundle : $bundle" )
+
+            }
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -57,6 +59,8 @@ class MainActivity : AppCompatActivity() {
             val intentAddProperty = Intent(this, AddPropertyActivity::class.java)
                     //.apply {
                 //putExtra(EXTRA_MESSAGE, message) }
+            intentAddProperty.putExtra("USER_EMAIL",userEmail)
+            Log.e("TAG", "onCreateMAIN vers Add: email "+userEmail )
             startActivity(intentAddProperty)
         }
 
@@ -73,6 +77,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_logout), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
 
     }
 

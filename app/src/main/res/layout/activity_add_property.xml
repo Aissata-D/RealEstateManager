@@ -13,14 +13,14 @@
         tools:layout_editor_absoluteX="9dp"
         tools:layout_editor_absoluteY="79dp">
 
-
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/property_btn_add_property"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_marginTop="64dp"
+            app:backgroundTint="@color/cyan"
+            android:textColor="@color/black"
             android:text="Add property"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -153,22 +153,21 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/property_address_layout"
+    <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_property_address"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_height="52dp"
+
             android:hint="Property address"
+            android:layout_margin="8dp"
+            android:gravity="left"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/property_surface_layout">
+            app:layout_constraintTop_toBottomOf="@+id/property_surface_layout"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/property_address_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.textfield.TextInputLayout>
+
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView_nearby_points"
@@ -185,28 +184,29 @@
             app:singleLine="true"
             android:layout_margin="8dp"
             >
-
-
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_school"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                app:chipBackgroundColor="@color/cyan"
+                android:checked="false"
                 android:text="School"/>
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_shops"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                app:chipBackgroundColor="@color/cyan"
+                android:checked="false"
                 android:text="Shops"/>
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_park"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                app:chipBackgroundColor="@color/cyan"
+                android:checked="false"
                 android:text="Park"/>
 
         </com.google.android.material.chip.ChipGroup>
@@ -225,7 +225,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/property_address_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_property_address" />
 
 
         <com.google.android.material.textview.MaterialTextView

@@ -34,7 +34,7 @@ data class Property(
         @ColumnInfo(name = "property_address")
         val propertyAddress: String,
         @ColumnInfo(name = "property_nearby_points_of_interest")
-        val propertyNearbyPointsOfInterest: String,
+        val propertyNearbyPointsOfInterest: List<String>,
         @ColumnInfo(name = "property_date_of_register")
         val propertyDateOfRegister: Date?,
         @ColumnInfo(name = "property_date_of_sale")

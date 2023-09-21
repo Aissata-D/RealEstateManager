@@ -6,33 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sitadigi.realestatemanager.dao.PropertyDao
-import com.sitadigi.realestatemanager.database.UserDatabase
+import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.databinding.FragmentHomeBinding
-import com.sitadigi.realestatemanager.model.Property
-import com.sitadigi.realestatemanager.ui.PropertyRecyclerviewAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-
-//import fr.sitadigi.realestatemanager.databinding.FragmentHomeBinding
+import com.sitadigi.realestatemanager.ui.DetailsPropertyFragment
+import com.sitadigi.realestatemanager.ui.ListPropertyFragment
 
 class HomeFragment : Fragment() {
-    private var properties = listOf<Property>()
+   /* private var properties = listOf<Property>()
     private val viewModelJob = SupervisorJob()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private lateinit var propertyDao: PropertyDao
+    private lateinit var propertyDao: PropertyDao*/
+    private lateinit var listPropertyFragment : ListPropertyFragment
+    private lateinit var detailsPropertyFragment : DetailsPropertyFragment
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-    lateinit var recyclerView: RecyclerView
 
+    private val binding get() = _binding!!
+
+  /* override fun onCreate(savedInstanceState: Bundle?) {
+       super.onCreate(savedInstanceState)
+
+   }*/
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?): View {
@@ -40,36 +35,49 @@ class HomeFragment : Fragment() {
                 ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-         recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
+                val root: View = binding.root
+        //val root= inflater.inflate(com.sitadigi.realestatemanager.R.layout.fragment_home, container, false)
 
-        if(this.context !=null) {
-            propertyDao = UserDatabase.getInstance(this.context)?.propertyDao!!
-        }
-        //val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {
           //  textView.text = it
         }
 
-
-        initRecyclerView()
+        configureAndShowMainFragment()
+       configureAndShowDetailFragment()
 
         return root
     }
-    private fun initRecyclerView(){
-        // set up the RecyclerView
-        // set up the RecyclerView
 
-        uiScope.launch {
-            properties = propertyDao.getAllProperty()
+    private fun configureAndShowMainFragment() {
+        // A - Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+      //  listPropertyFragment = (getFragmentManager()?.findFragmentById(R.id.framLayout_list_property)
+        //        as? ListPropertyFragment)!!
 
-
-        val adapter = PropertyRecyclerviewAdapter(properties)
-        // adapter.setClickListener(this)
-        recyclerView.adapter = adapter
+       // if (listPropertyFragment == null) {
+            // B - Create new main fragment
+            listPropertyFragment = ListPropertyFragment()
+            // C - Add it to FrameLayout container
+            getFragmentManager()?.beginTransaction()
+                    ?.add(R.id.framLayout_list_property, listPropertyFragment)
+                    ?.commit()
+        //}
+    }
+    private fun configureAndShowDetailFragment() {
+        // A - Get FragmentManager (Support) and Try to find existing instance of fragment in FrameLayout container
+       // detailsPropertyFragment = getFragmentManager()?.findFragmentById(R.id.framLayout_detail_property)
+         //      as DetailsPropertyFragment
+        //if (detailsPropertyFragment == null) {
+            // B - Create new main fragment
+        if(getFragmentManager()?.findFragmentById(R.id.framLayout_detail_property)!= null) {
+            detailsPropertyFragment = DetailsPropertyFragment()
+            // C - Add it to FrameLayout container
+            getFragmentManager()?.beginTransaction()
+                    ?.add(R.id.framLayout_detail_property, detailsPropertyFragment)
+                    ?.commit()
+            //}
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

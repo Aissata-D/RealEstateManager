@@ -35,5 +35,6 @@
     <string name="prompt_name">Your name</string>
     <string name="prompt_phone_number">Phone number</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="menu_home_activity">home_activity</string>
 
 </resources>

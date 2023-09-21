@@ -7,7 +7,7 @@ import com.sitadigi.realestatemanager.model.UserEntity
 
 class StatusRepository(private val dao: StatusDao) {
 
-    suspend fun createStatus(status: Status) {
+    suspend fun insert(status: Status) {
         return dao.insert(status)
     }
 

@@ -8,17 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.EncodingUtils.getBytes
 import com.sitadigi.realestatemanager.R
-import com.sitadigi.realestatemanager.model.PictureInter
 import com.sitadigi.realestatemanager.model.Property
+import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
 
-class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
+class PropertyRecyclerviewAdapter (private val mList: List<Property>, private val custom: PropertyRecyclerViewCustom) :
         RecyclerView.Adapter<PropertyRecyclerviewAdapter.ViewHolder>(){
-
-
-
-
 
         // create new views
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,8 +21,7 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
             // that is used to hold list item
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_property, parent, false)
-
-            return ViewHolder(view)
+                    return ViewHolder(view)
         }
 
         // binds the list items to a view
@@ -37,11 +31,14 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
 
             // sets the image to the imageview from our itemHolder class
             //holder.imageView.setImageBitmap(getPictureBitmap(ItemsViewModel.propertyListOfPictures.get(0)))
-             loadImageFromFile(holder.itemPropertyImageView,ItemsViewModel.propertyListOfPictures.get(0))
-                holder.itemPropertyType.text = ItemsViewModel.propertyType
+            val bitmap =loadImageFromFile(/*holder.itemPropertyImageView,*/ItemsViewModel.propertyListOfPictures.get(0))
+            holder.itemPropertyType.text = ItemsViewModel.propertyType
             holder.itemPropertyLocation.text = ItemsViewModel.propertyAddress
             holder.itemPropertyPrice.text = ItemsViewModel.propertyPrice.toString()
-            // sets the text to the textview from our itemHolder class
+            holder.customView.setImageBitmap(bitmap)
+            holder.customView.setText("toto")
+
+        // sets the text to the textview from our itemHolder class
             // holder.textView.text = ItemsViewModel.text
 
         }
@@ -53,7 +50,8 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
 
         // Holds the views for adding it to image and text
         class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-            val itemPropertyImageView: ImageView = itemView.findViewById(R.id.item_property_recyclerview_img)
+            val customView : PropertyRecyclerViewCustom = itemView.findViewById(R.id.property_recycler_view_custom)
+           // val itemPropertyImageView: ImageView = itemView.findViewById(R.id.property_recycler_view_custom)
             val itemPropertyType : MaterialTextView = itemView.findViewById(R.id.item_property_type)
             val itemPropertyPrice : MaterialTextView = itemView.findViewById(R.id.item_property_price)
             val itemPropertyLocation : MaterialTextView = itemView.findViewById(R.id.item_property_location)
@@ -64,7 +62,7 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
             return bitmap
         }
 
-    fun loadImageFromFile(view : ImageView, currentPhotoPath : String) {
+    fun loadImageFromFile(/*view : ImageView,*/ currentPhotoPath : String): Bitmap? {
         // val view: ImageView = findViewById<View>(R.id.imageViewHeader) as ImageView
         // view.setVisibility(View.VISIBLE)
         //  val targetW: Int = view.getWidth()
@@ -90,6 +88,8 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>) :
        // pictureInters.add(PictureInter(photoDescription,currentPhotoPath,imageBytArray))
         //pictureOfProperty.add(currentPhotoPath)
         //initRecyclerView()
-         view.setImageBitmap(bitmap)
+        custom.setImageBitmap(bitmap)
+        // view.setImageBitmap(bitmap)
+        return bitmap
     }
 }

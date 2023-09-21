@@ -1,6 +1,7 @@
 package com.sitadigi.realestatemanager.utils
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -13,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+
+
 
 class LoginUtils (val loginViewModel : LoginViewModel, val activity: FragmentActivity?){
 
@@ -47,6 +50,9 @@ class LoginUtils (val loginViewModel : LoginViewModel, val activity: FragmentAct
                         val passwordToVerify = userToLogged.userPassword
                         if(passwordToVerify == userPassword){
                             val intent = Intent(activity, MainActivity::class.java)
+                            intent.putExtra("USER_EMAIL",userEmail)
+                            Log.e("TAG", "onCreateLoggin vers Main: email:"+userEmail )
+
                             activity?.startActivity(intent)
                         }else{
                             // write a valid password
@@ -86,6 +92,7 @@ class LoginUtils (val loginViewModel : LoginViewModel, val activity: FragmentAct
                             Toast.makeText(activity?.applicationContext,
                                     "Registration Success ", Toast.LENGTH_SHORT).show()
                             val intent = Intent(activity, MainActivity::class.java)
+                            intent.putExtra("USER_EMAIL",userEmail)
                             activity?.startActivity(intent)
                         }
 
