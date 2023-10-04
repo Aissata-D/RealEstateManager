@@ -22,7 +22,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @Database(entities = [UserEntity::class, Status::class, Picture::class, Property::class],
-        version = 7, exportSchema = false)
+        version = 8, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class UserDatabase : RoomDatabase() {
 
@@ -57,7 +57,7 @@ abstract class UserDatabase : RoomDatabase() {
                             instance = Room.databaseBuilder(
                                     context.applicationContext,
                                     UserDatabase::class.java,
-                                    "database12"
+                                    "database13"
                             ).addCallback(prepopulateDatabase())
                                     .build()
                         }

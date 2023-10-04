@@ -35,14 +35,13 @@ class DetailsPropertyFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
        val view= inflater.inflate(R.layout.fragment_details_property, container, false)
-        imgDetailMap = view.findViewById(R.id.detail_map)
+        imgDetailMap = view.findViewById(R.id.map_detail_imv)
         configureDetailView()
         return view
     }

@@ -29,6 +29,10 @@ data class Property(
         val propertySurface: Int,
         @ColumnInfo(name = "property_number_of_rooms")
         val propertyNumberOfRooms: Int,
+        @ColumnInfo(name = "property_number_of_bedrooms")
+        val propertyNumberOfBedRooms: Int,
+        @ColumnInfo(name = "property_number_of_bathrooms")
+        val propertyNumberOfBathRooms: Int,
         @ColumnInfo(name = "property_description")
         val propertyDescription: String,
         @ColumnInfo(name = "property_address")

@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
        loginUtils.clickOnLoginButton(userEmail,userPassword)
 
     }
-    private fun replaceWithRegisterFragment(fragment: Fragment?){
+  /*  private fun replaceWithRegisterFragment(fragment: Fragment?){
 
         if (fragment == null) return
         val fm = activity?.supportFragmentManager
@@ -98,5 +98,5 @@ class LoginFragment : Fragment() {
         transaction?.replace(R.id.framLayout_main_login, fragment)
         transaction?.commit()
 
-    }
+    }*/
 }

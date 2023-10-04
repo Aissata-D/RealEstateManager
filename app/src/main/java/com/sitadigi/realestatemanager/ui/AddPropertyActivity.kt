@@ -47,6 +47,8 @@ class AddPropertyActivity : FragmentActivity() {
     lateinit var editPropertyType: TextInputEditText
     lateinit var editPropertyPrice: TextInputEditText
     lateinit var editPropertySurface: TextInputEditText
+    lateinit var editNumberOfBathRooms: TextInputEditText
+    lateinit var editNumberOfBedRooms: TextInputEditText
     lateinit var editNumberOfRooms: TextInputEditText
     private lateinit var editDescription: TextInputEditText
     lateinit var tvAddress: MaterialTextView
@@ -83,6 +85,8 @@ class AddPropertyActivity : FragmentActivity() {
         editPropertyType = findViewById(R.id.property_type_input)
         editPropertyPrice = findViewById(R.id.property_price_input)
         editPropertySurface = findViewById(R.id.property_surface_input)
+        editNumberOfBathRooms = findViewById(R.id.property_number_bathroom_input)
+        editNumberOfBedRooms = findViewById(R.id.property_number_bedroom_input)
         editNumberOfRooms = findViewById(R.id.property_number_of_rooms_input)
         editDescription = findViewById(R.id.property_description_input)
         tvAddress = findViewById(R.id.tv_property_address)
@@ -122,8 +126,8 @@ class AddPropertyActivity : FragmentActivity() {
 
             }}
 
-            addPropertyUtils.clickOnAddPropertyBtn(editPropertyType, editPropertyPrice, editPropertySurface, editNumberOfRooms,
-                    editDescription, propertyLocality, propertyNearbyPointOfInterests, userEmail)
+            addPropertyUtils.clickOnAddPropertyBtn(editPropertyType, editPropertyPrice, editPropertySurface, editNumberOfRooms,editNumberOfBedRooms,
+                editNumberOfBathRooms,editDescription, propertyLocality, propertyNearbyPointOfInterests, userEmail)
 
             Log.e("TAG", "onCreate: DATE : "+Date() )
         }

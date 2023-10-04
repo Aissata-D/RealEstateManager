@@ -64,6 +64,8 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val ac
 
      fun clickOnAddPropertyBtn(editPropertyType: TextInputEditText, editPropertyPrice:TextInputEditText,
                                      editPropertySurface:TextInputEditText, editNumberOfRooms:TextInputEditText,
+                                     editNumberOfBedRooms:TextInputEditText
+                                    , editNumberOfBathRooms:TextInputEditText,
                                      editDescription:TextInputEditText, editAddress:String,
                                      //tvNearbyPointOfInterest:MaterialTextView,
                                      propertyNearbyPointOfInterests: List<String>,
@@ -75,13 +77,16 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val ac
             val propertyPrice = (editPropertyPrice.text.toString()).toDouble()
             val propertySurface = (editPropertySurface.text.toString()).toInt()
             val propertyNumberOfRooms = (editNumberOfRooms.text.toString()).toInt()
+            val propertyNumberOfBedRooms = (editNumberOfBedRooms.text.toString()).toInt()
+            val propertyNumberOfBathRooms = (editNumberOfBathRooms.text.toString()).toInt()
             val propertyDescription = editDescription.text.toString()
             val propertyAddress = editAddress
             //val propertyNearbyPointOfInterests =  mutableListOf<String>()//tvNearbyPointOfInterest.text.toString()
            // val propertySpinnerEmailOfRealEstateAgent = tvEmailOfRealEstateAgent
 
             val property = Property(0,propertyType,propertyPrice,propertySurface
-                    ,propertyNumberOfRooms,propertyDescription, propertyAddress,
+                    ,propertyNumberOfRooms,propertyNumberOfBedRooms,propertyNumberOfBathRooms
+                    ,propertyDescription, propertyAddress,
                     propertyNearbyPointOfInterests,Date(),null,
                     1, tvEmailOfRealEstateAgent,pictureOfProperty)
 

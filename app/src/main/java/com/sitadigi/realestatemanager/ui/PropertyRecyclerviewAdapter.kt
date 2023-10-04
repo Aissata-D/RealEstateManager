@@ -1,11 +1,13 @@
 package com.sitadigi.realestatemanager.ui
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.R
@@ -38,8 +40,27 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
             holder.customView.setImageBitmap(bitmap)
             holder.customView.setText("toto")
 
+            // Clic on item in list ; Open Details of property clicked
+            holder.itemView.setOnClickListener(View.OnClickListener { v ->
+                Toast.makeText(v.context, "ITEM CLIQUE", Toast.LENGTH_SHORT).show()
+                val property = ItemsViewModel
+                val intentPropertyDetail = Intent(v.context,DetailsPropertyActivity::class.java)
+                v.context.startActivity(intentPropertyDetail)
+
+                intentPropertyDetail.putExtra("propertyType", property.propertyType)
+                // intentPropertyDetail.put
+
+                /* mPosition = listViewHolder.getAdapterPosition()
+                 val restaurant: GoogleMapApiClass.Result = mRestaurants.get(mPosition)
+                 val openDetailActivityUtils = OpenDetailActivityUtils()
+                 openDetailActivityUtils.clickOnOpenDetailActivityInLisViewAdapter(
+                     restaurant,
+                     v.context, mMainViewViewModel
+                 )*/
+            })
         // sets the text to the textview from our itemHolder class
             // holder.textView.text = ItemsViewModel.text
+
 
         }
 
