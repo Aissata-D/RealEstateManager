@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.DetailsPropertyActivity">
     <FrameLayout
-        android:id="@+id/framLayout_add_meeting"
+        android:id="@+id/framLayout_add_property_or_detail_property"
         android:name="fr.sitadigi.mareu.ui.ListMailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -126,24 +126,22 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_bedroom" />
-<ImageView
-    android:id="@+id/map_detail_imv"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
 
-    app:layout_constraintTop_toBottomOf="@+id/tv_property_location"
-    />
 
     <fragment
         android:id="@+id/detail_map_fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/tv_property_location"
-        map:uiZoomControls="true"
-        map:uiRotateGestures="true"
         map:cameraTilt="30"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+        map:uiRotateGestures="true"
+        map:uiZoomControls="true"
+        tools:context=".ui.DetailsPropertyActivity" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

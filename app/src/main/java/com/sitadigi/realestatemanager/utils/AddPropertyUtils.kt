@@ -21,14 +21,20 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.model.PictureInter
 import com.sitadigi.realestatemanager.model.Property
+import com.sitadigi.realestatemanager.ui.AUTOCOMPLETE_REQUEST_CODE
 import com.sitadigi.realestatemanager.ui.AddImageAdapter
 import com.sitadigi.realestatemanager.ui.MainActivity
 import com.sitadigi.realestatemanager.ui.PropertyViewModel
+import com.sitadigi.realestatemanager.ui.mCallback
+import com.sitadigi.realestatemanager.ui.propertyLocality
+import com.sitadigi.realestatemanager.ui.tvAddress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -282,6 +288,33 @@ fun startActivity(){
             Toast.makeText(activity?.applicationContext,"text",Toast.LENGTH_SHORT).show()
 
         }
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.let {
+                        val place = Autocomplete.getPlaceFromIntent(data)
+                        propertyLocality =  place.addressComponents.asList().get(2).name
+                        Log.e("TAG", "Place: ${place.name}, ${place.id}," +
+                                place.addressComponents.asList().get(2).name)
+                        tvAddress.text=place.address
+                    }
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    // TODO: Handle the error.
+                    data?.let {
+                        val status = Autocomplete.getStatusFromIntent(data)
+                        Log.e("TAG ERROR", status.statusMessage ?: "")
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    Log.e("TAG", "onActivityResult: CANCELED" )
+                    // The user canceled the operation.
+                }
+            }
+           // mCallback?.OnButtonClickedListener(view)
+            return
+        }
+
     }
 
 }

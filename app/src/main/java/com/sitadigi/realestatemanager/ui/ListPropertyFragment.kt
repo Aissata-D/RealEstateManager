@@ -38,12 +38,15 @@ class ListPropertyFragment : Fragment() {
     private lateinit var propertyDao: PropertyDao
     lateinit var recyclerView: RecyclerView
     lateinit var custom: PropertyRecyclerViewCustom
+     var mConfig :String?=""
+    val CONFIG = "CONFIG"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            mConfig = it.getString(CONFIG)
         }
     }
 
@@ -60,7 +63,18 @@ class ListPropertyFragment : Fragment() {
             custom = PropertyRecyclerViewCustom(this.requireContext(),null,0)
 
         }
-        initRecyclerView()
+
+        //initRecyclerView()
+        uiScope.launch {
+
+
+            properties = propertyDao.getAllProperty()
+
+
+            val adapter = PropertyRecyclerviewAdapter(properties,custom, activity!!,mConfig)
+            // adapter.setClickListener(this)
+            recyclerView.adapter = adapter
+        }
 
         return v
     }
@@ -73,7 +87,7 @@ class ListPropertyFragment : Fragment() {
             properties = propertyDao.getAllProperty()
 
 
-            val adapter = PropertyRecyclerviewAdapter(properties,custom)
+            val adapter = PropertyRecyclerviewAdapter(properties,custom, activity!!,mConfig)
             // adapter.setClickListener(this)
             recyclerView.adapter = adapter
         }

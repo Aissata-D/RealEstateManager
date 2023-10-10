@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#C5C7C4"
-        android:orientation="horizontal"
-        tools:context=".ui.home.HomeFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C5C7C4"
+    android:orientation="vertical"
+    tools:context=".ui.home.HomeFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0px"
         android:layout_margin="16dp"
-        android:layout_weight="70"
+        android:layout_weight="40"
         android:padding="8dp"
         app:cardCornerRadius="16dp">
 
@@ -24,31 +24,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-             </FrameLayout>
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_margin="16dp"
+        android:layout_weight="70"
+        app:cardCornerRadius="16dp">
 
-        <androidx.cardview.widget.CardView
+        <FrameLayout
+            android:id="@+id/framLayout_detail_or_add_property"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:layout_weight="30"
-            app:cardCornerRadius="16dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <FrameLayout
-                android:id="@+id/framLayout_detail_property"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
 
-    </LinearLayout>
+</LinearLayout>
 
 

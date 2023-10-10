@@ -1,16 +1,23 @@
 package com.sitadigi.realestatemanager.ui
 
+
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.R
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +29,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [DetailsPropertyFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DetailsPropertyFragment : Fragment() {
+class DetailsPropertyFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    lateinit var imgDetailMap: ImageView
+    //lateinit var imgDetailMap: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +48,14 @@ class DetailsPropertyFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
        val view= inflater.inflate(R.layout.fragment_details_property, container, false)
-        imgDetailMap = view.findViewById(R.id.map_detail_imv)
+    //    imgDetailMap = view.findViewById(R.id.map_detail_imv)
+
+       //val mapFragment1 = supportFragmentManager.findFragmentById(R.id.detail_map_fragment) as? SupportMapFragment
+       // mapFragment?.getMapAsync(this)
+
+        val mapFragment = fragmentManager?.findFragmentById(R.id.detail_map_fragment) as MapFragment?
+        mapFragment?.getMapAsync(this)
+
         configureDetailView()
         return view
     }
@@ -53,13 +67,13 @@ class DetailsPropertyFragment : Fragment() {
         val urlConcat = urlPart1 + urlPart2 + urlPart3
 
         //GLIDE TO SHOW IMAGE OF THE RESTAURANT
-        Glide.with(this)
+    /*    Glide.with(this)
                 .load(getUrl(urlConcat))
                 .apply(RequestOptions.noTransformation())
                 .centerCrop()
                 //.placeholder()
                 .into(imgDetailMap)
-
+            */
 
     }
 
@@ -86,5 +100,23 @@ class DetailsPropertyFragment : Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        val sydney = LatLng(45.763420, 4.834277)
+        val cameraPosition = CameraPosition.Builder()
+            .target(sydney)
+            .zoom(15f)
+            //.bearing(-30f)
+            //.tilt(15f)
+            .build()
+
+
+        map?.addMarker(
+            MarkerOptions()
+                .position(sydney)
+                .title("Property location")
+        )
+        map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }

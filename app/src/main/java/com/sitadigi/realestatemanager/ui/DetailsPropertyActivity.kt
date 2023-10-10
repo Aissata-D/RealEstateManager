@@ -19,12 +19,12 @@ import com.sitadigi.realestatemanager.R
 
 
 class DetailsPropertyActivity : AppCompatActivity(), OnMapReadyCallback {
-    lateinit var imgDetailMap: ImageView
+   // lateinit var imgDetailMap: ImageView
    // lateinit var  mapFragment:SupportMapFragment?
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_property)
-        imgDetailMap = findViewById(R.id.map_detail_imv)
+      //  imgDetailMap = findViewById(R.id.map_detail_imv)
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         // Get the SupportMapFragment and request notification when the map is ready to be used.
@@ -40,8 +40,8 @@ class DetailsPropertyActivity : AppCompatActivity(), OnMapReadyCallback {
         val cameraPosition = CameraPosition.Builder()
             .target(sydney)
             .zoom(15f)
-            .bearing(-30f)
-            .tilt(75f)
+            //.bearing(-30f)
+            //.tilt(15f)
             .build()
 
 
@@ -77,14 +77,14 @@ class DetailsPropertyActivity : AppCompatActivity(), OnMapReadyCallback {
         //val urlConcat:String = "https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&maptype=roadmap&key=AIzaSyCRwilK4p9DLKw5ZH86oGSKb8MR8W5jaHE"
         //val urlConcat = urlConcat1
         //GLIDE TO SHOW IMAGE OF THE RESTAURANT
-        Glide.with(this)
+    /*    Glide.with(this)
                 .load(getUrl(urlConcat))
                 .apply(RequestOptions.noTransformation())
                 .centerCrop()
                // .placeholder(R.drawable.img_property_placeholder)
                 .into(imgDetailMap)
 
-
+*/
     }
 
     // Build a url to get restaurant image

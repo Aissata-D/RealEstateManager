@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -32,7 +33,7 @@ import com.sitadigi.realestatemanager.viewModelFactory.PropertyViewModelFactory
 import java.util.*
 
 
-class AddPropertyActivity : FragmentActivity() {
+class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interfaceClicOnButtonAddImage */{
 
     var userEmail = ""
     lateinit  var propertyLocality: String
@@ -102,7 +103,8 @@ class AddPropertyActivity : FragmentActivity() {
 
         addPropertyUtils.verifyStoragePermissions(this)
 
-        fabTakePhotoWithCamera.setOnClickListener { addPropertyUtils.showAddImageDialog(OPEN_CAMERA,this) }
+        fabTakePhotoWithCamera.setOnClickListener {
+            addPropertyUtils.showAddImageDialog(OPEN_CAMERA,this) }
 
         fabAddPictureFromGallery.setOnClickListener { addPropertyUtils.showAddImageDialog(OPEN_GALLERY,this) }
 
@@ -242,37 +244,41 @@ class AddPropertyActivity : FragmentActivity() {
 
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    /*   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+          super.onActivityResult(requestCode, resultCode, data)
 
-        addPropertyUtils.checkActivityResult(requestCode,resultCode, data)
+         addPropertyUtils.checkActivityResult(requestCode,resultCode, data)
 
 
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    data?.let {
-                        val place = Autocomplete.getPlaceFromIntent(data)
-                        propertyLocality =  place.addressComponents.asList().get(2).name
-                        Log.e("TAG", "Place: ${place.name}, ${place.id}," +
-                                place.addressComponents.asList().get(2).name)
-                        tvAddress.text=place.address
-                    }
-                }
-                AutocompleteActivity.RESULT_ERROR -> {
-                    // TODO: Handle the error.
-                    data?.let {
-                        val status = Autocomplete.getStatusFromIntent(data)
-                        Log.e("TAG ERROR", status.statusMessage ?: "")
-                    }
-                }
-                Activity.RESULT_CANCELED -> {
-                    Log.e("TAG", "onActivityResult: CANCELED" )
-                    // The user canceled the operation.
-                }
-            }
-            return
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
+         /* if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+              when (resultCode) {
+                  Activity.RESULT_OK -> {
+                      data?.let {
+                          val place = Autocomplete.getPlaceFromIntent(data)
+                          propertyLocality =  place.addressComponents.asList().get(2).name
+                          Log.e("TAG", "Place: ${place.name}, ${place.id}," +
+                                  place.addressComponents.asList().get(2).name)
+                          tvAddress.text=place.address
+                      }
+                  }
+                  AutocompleteActivity.RESULT_ERROR -> {
+                      // TODO: Handle the error.
+                      data?.let {
+                          val status = Autocomplete.getStatusFromIntent(data)
+                          Log.e("TAG ERROR", status.statusMessage ?: "")
+                      }
+                  }
+                  Activity.RESULT_CANCELED -> {
+                      Log.e("TAG", "onActivityResult: CANCELED" )
+                      // The user canceled the operation.
+                  }
+              }
+              return
+          }*/
+          super.onActivityResult(requestCode, resultCode, data)
+      }*/
+
+   /* override fun OnButtonClickedListener(view: View?) {
+        Log.e("TAG", "OnButtonClickedListener:AddPropertyActivity " )
+    }*/
 }

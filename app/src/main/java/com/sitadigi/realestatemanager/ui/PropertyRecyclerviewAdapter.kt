@@ -1,33 +1,44 @@
 package com.sitadigi.realestatemanager.ui
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
 
-class PropertyRecyclerviewAdapter (private val mList: List<Property>, private val custom: PropertyRecyclerViewCustom) :
+
+class PropertyRecyclerviewAdapter (private val mList: List<Property>, private val custom: PropertyRecyclerViewCustom,
+                                   val fragmentActivity: FragmentActivity, val mConfig:String?) :
         RecyclerView.Adapter<PropertyRecyclerviewAdapter.ViewHolder>(){
 
+    val POSITION = "POSITION"
+    val CONFIG = "CONFIG"
+    val PHONE = "PHONE"
+    val TABLET= "TABLET"
+    var detailPropertyFragment: DetailsPropertyFragment? =null
         // create new views
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             // inflates the card_view_design view
             // that is used to hold list item
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_property, parent, false)
-                    return ViewHolder(view)
+           // detailPropertyFragment=DetailsPropertyFragment()
+
+            return ViewHolder(view)
         }
 
         // binds the list items to a view
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
 
             val ItemsViewModel = mList[position]
 
@@ -41,28 +52,54 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
             holder.customView.setText("toto")
 
             // Clic on item in list ; Open Details of property clicked
-            holder.itemView.setOnClickListener(View.OnClickListener { v ->
+           holder.itemView.setOnClickListener(View.OnClickListener { v ->
                 Toast.makeText(v.context, "ITEM CLIQUE", Toast.LENGTH_SHORT).show()
-                val property = ItemsViewModel
-                val intentPropertyDetail = Intent(v.context,DetailsPropertyActivity::class.java)
-                v.context.startActivity(intentPropertyDetail)
+               val fragmentManager: FragmentManager = fragmentActivity.supportFragmentManager
+               val transaction = fragmentManager.beginTransaction()
 
-                intentPropertyDetail.putExtra("propertyType", property.propertyType)
-                // intentPropertyDetail.put
+               if (mConfig !== TABLET) {
+                  // position = holder.getAdapterPosition()
+                   if (detailPropertyFragment == null) {
+                       detailPropertyFragment = DetailsPropertyFragment()
+                       // Put Meeting position in a detailMeetingFragment
+                       val bundle = Bundle()
+                       bundle.putInt(POSITION, position)
+                       bundle.putString(CONFIG, PHONE)
+                       detailPropertyFragment!!.setArguments(bundle)
+                      // if(fragmentActivity.findFr(R.id.framLayout_detail_or_add_property)==null){
 
-                /* mPosition = listViewHolder.getAdapterPosition()
-                 val restaurant: GoogleMapApiClass.Result = mRestaurants.get(mPosition)
-                 val openDetailActivityUtils = OpenDetailActivityUtils()
-                 openDetailActivityUtils.clickOnOpenDetailActivityInLisViewAdapter(
-                     restaurant,
-                     v.context, mMainViewViewModel
-                 )*/
-            })
-        // sets the text to the textview from our itemHolder class
-            // holder.textView.text = ItemsViewModel.text
+                       //}
+                       transaction.replace(R.id.framLayout_list_property, detailPropertyFragment!!)
+                   } //give your fragment container id in first parameter
+                   else {
+                       transaction.show(detailPropertyFragment!!)
+                       /*  val bundle = Bundle()
+                         bundle.putInt(POSITION, position)
+                         bundle.putString(CONFIG, PHONE)
+                         detailPropertyFragment!!.setArguments(bundle)
+                         transaction.replace(R.id.framLayout_list_property, detailPropertyFragment!!)
+                    */
+                   }
+               } else if (mConfig === TABLET) {
+                  // mPosition = holder.getAdapterPosition()
+                   detailPropertyFragment = DetailsPropertyFragment()
+                   // Put Meeting position in a detailMeetingFragment
+                   val bundle = Bundle()
+                   bundle.putInt(POSITION, position)
+                   bundle.putString(CONFIG, TABLET)
+                   detailPropertyFragment!!.setArguments(bundle)
+                   transaction.replace(R.id.framLayout_detail_or_add_property, detailPropertyFragment!!)
+               } else {
+                   transaction.show(detailPropertyFragment!!)
+               }
 
+               transaction.addToBackStack("detailMeetingFragment") //if written, this transaction will be added to backstack
 
+               transaction.commit()
+
+        })
         }
+
 
         // return the number of the items in the list
         override fun getItemCount(): Int {

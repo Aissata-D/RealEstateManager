@@ -36,7 +36,7 @@
             app:cardCornerRadius="16dp">
 
             <FrameLayout
-                android:id="@+id/framLayout_detail_property"
+                android:id="@+id/framLayout_detail_or_add_property"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
