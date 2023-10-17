@@ -7,10 +7,12 @@ import androidx.room.PrimaryKey
 import java.sql.Blob
 
 
-@Entity(tableName = "Picture_table" ,foreignKeys = [androidx.room.ForeignKey(
-        entity = com.sitadigi.realestatemanager.model.Property::class,
-        parentColumns = kotlin.arrayOf("property_id"),
-        childColumns = kotlin.arrayOf("fk_property_id"))])
+@Entity(tableName = "Picture_table",
+    //foreignKeys = [androidx.room.ForeignKey(
+       // entity = com.sitadigi.realestatemanager.model.Property::class,
+       // parentColumns = kotlin.arrayOf("property_id"),
+      //  childColumns = kotlin.arrayOf("fk_property_id"))]
+        )
 data class Picture (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "picture_id")
@@ -22,6 +24,8 @@ data class Picture (
     //@ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     @ColumnInfo(name = "picture_image")
      var image:  ByteArray,
+    @ColumnInfo(name = "picture_currentPhotoPath")
+    var currentPhotoPath: String,
 
     @ColumnInfo(name = "fk_property_id")
     var fkPropertyId :Int

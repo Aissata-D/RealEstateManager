@@ -24,17 +24,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
+import com.sitadigi.realestatemanager.model.Picture
 import com.sitadigi.realestatemanager.model.PictureInter
 import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.ui.AUTOCOMPLETE_REQUEST_CODE
 import com.sitadigi.realestatemanager.ui.AddImageAdapter
 import com.sitadigi.realestatemanager.ui.MainActivity
-import com.sitadigi.realestatemanager.ui.PropertyViewModel
-import com.sitadigi.realestatemanager.ui.mCallback
+import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
 import com.sitadigi.realestatemanager.ui.propertyLocality
 import com.sitadigi.realestatemanager.ui.tvAddress
+import com.sitadigi.realestatemanager.viewModel.PictureViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -46,7 +46,8 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val activity: Activity?,
+class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, private val pictureViewModel : PictureViewModel,
+                       val activity: Activity?,
                        private val recyclerView: RecyclerView) {
     var bitmap: Bitmap? = null
     private val viewModelJob = SupervisorJob()
@@ -54,6 +55,7 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val ac
     private var pictureInters = mutableListOf<PictureInter>()
     private var pictureOfProperty = mutableListOf<String>()
 
+    lateinit var picture : Picture
     lateinit var currentPhotoPath: String
     private val REQUEST_EXTERNAL_STORAGE = 1
     private val PERMISSIONS_STORAGE = arrayOf(
@@ -66,6 +68,9 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val ac
     var photoDescription = ""
     val OPEN_GALLERY = "OPEN_GALLERY"
     val OPEN_CAMERA = "OPEN_CAMERA"
+
+     var propertyLastId = 0
+     var propertyId = 0
 
 
      fun clickOnAddPropertyBtn(editPropertyType: TextInputEditText, editPropertyPrice:TextInputEditText,
@@ -90,11 +95,19 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, val ac
             //val propertyNearbyPointOfInterests =  mutableListOf<String>()//tvNearbyPointOfInterest.text.toString()
            // val propertySpinnerEmailOfRealEstateAgent = tvEmailOfRealEstateAgent
 
+           //
+            //val pictureId = pictureViewModel.getPictureLastId()
+
+           // propertyLastId = propertyViewModel.getLastId()
+          //  propertyId = propertyLastId +1
+
+           // pictureViewModel.insert(picture)
+
             val property = Property(0,propertyType,propertyPrice,propertySurface
                     ,propertyNumberOfRooms,propertyNumberOfBedRooms,propertyNumberOfBathRooms
                     ,propertyDescription, propertyAddress,
                     propertyNearbyPointOfInterests,Date(),null,
-                    1, tvEmailOfRealEstateAgent,pictureOfProperty)
+                    1, tvEmailOfRealEstateAgent)
 
             propertyViewModel.insert(property)
             Log.e("TAG", "onCreate: INSERT $property" )
@@ -222,6 +235,19 @@ fun startActivity(){
         val bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
         // val description = editImgDescription.text.toString()
         val imageBytArray: ByteArray = getBytes(bitmap)
+
+        uiScope.launch {
+            if ((propertyViewModel.countPropertyTable() == 0)) {// Pourquoi ça plante ici ?????
+                propertyId = 1
+            } else {
+                propertyLastId = propertyViewModel.getLastId()
+                propertyId = propertyLastId + 1
+            }
+
+            picture = Picture(0, photoDescription, imageBytArray, currentPhotoPath, propertyId)
+            pictureViewModel.insert(picture)
+        }
+
         pictureInters.add(PictureInter(photoDescription,currentPhotoPath,imageBytArray))
         pictureOfProperty.add(currentPhotoPath)
         initRecyclerView()

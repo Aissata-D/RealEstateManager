@@ -29,6 +29,7 @@ class DetailsPropertyActivity : AppCompatActivity(), OnMapReadyCallback {
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         // Get the SupportMapFragment and request notification when the map is ready to be used.
+
          val mapFragment = supportFragmentManager.findFragmentById(R.id.detail_map_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 

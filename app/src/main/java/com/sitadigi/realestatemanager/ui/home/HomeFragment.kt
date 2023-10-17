@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.databinding.FragmentHomeBinding
+
 import com.sitadigi.realestatemanager.ui.AddPropertyFragment
 import com.sitadigi.realestatemanager.ui.DetailsPropertyFragment
 import com.sitadigi.realestatemanager.ui.ListPropertyFragment
@@ -43,6 +44,14 @@ class HomeFragment : Fragment() {
        super.onCreate(savedInstanceState)
 
    }*/
+  override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+      arguments?.let {
+          //param1 = it.getString(ARG_PARAM1)
+          //param2 = it.getString(ARG_PARAM2)
+          // mConfig = it.getString(CONFIG)
+      }
+  }
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?): View {
@@ -57,7 +66,9 @@ class HomeFragment : Fragment() {
         }
 
      // configureAndShowListFragment(root)
-      configureDispalyingFragmentListAndDetailAndAdd(root)
+      if(savedInstanceState == null) {
+          configureDispalyingFragmentListAndDetailAndAdd(root)
+      }
 
 
         return root

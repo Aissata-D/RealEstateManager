@@ -13,7 +13,12 @@ import java.util.*
 @Entity(tableName = "Property_table",
         foreignKeys = [ForeignKey(entity = Status::class,
                 parentColumns = arrayOf("status_id"),
-                childColumns = arrayOf("property_status_id"))])
+                childColumns = arrayOf("property_status_id"))]
+
+             //   ,ForeignKey(entity = Picture::class,
+               // parentColumns = arrayOf("picture_id"),
+                //childColumns = arrayOf("property_picture_id"))]
+                )
 data class Property(
 
         @PrimaryKey(autoGenerate = true)
@@ -47,7 +52,9 @@ data class Property(
         val propertyStatusId: Int,
         @ColumnInfo(name = "property_email_of_real_estate_agent")
         val propertyEmailOfRealEstateAgent: String,
-        @ColumnInfo(name = "property_list_of_pictures")
-        val propertyListOfPictures: List<String>
+        //@ColumnInfo(name = "property_picture_id")
+        //val propertyPictureId: Int
+      //  @ColumnInfo(name = "property_list_of_pictures")
+        //val propertyListOfPictures: List<PictureInter>
 
 )

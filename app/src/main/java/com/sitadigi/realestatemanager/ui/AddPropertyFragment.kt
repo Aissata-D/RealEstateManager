@@ -1,6 +1,5 @@
 package com.sitadigi.realestatemanager.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,7 +22,6 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -33,6 +31,9 @@ import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.utils.AddPropertyUtils
+import com.sitadigi.realestatemanager.viewModel.PictureViewModel
+import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
+import com.sitadigi.realestatemanager.viewModelFactory.PictureViewModelFactory
 import com.sitadigi.realestatemanager.viewModelFactory.PropertyViewModelFactory
 import java.util.Date
 
@@ -45,6 +46,7 @@ var userEmail = ""
 lateinit  var propertyLocality: String
 lateinit var addPropertyUtils: AddPropertyUtils
 private lateinit var propertyViewModel: PropertyViewModel
+private lateinit var pictureViewModel: PictureViewModel
 
 private val OPEN_GALLERY = "OPEN_GALLERY"
 private val OPEN_CAMERA = "OPEN_CAMERA"
@@ -61,7 +63,7 @@ private lateinit var editDescription: TextInputEditText
 lateinit var tvAddress: MaterialTextView
 lateinit var tvNearbyPointOfInterest: MaterialTextView
 lateinit var tvEmailOfRealEstateAgent: MaterialTextView
-lateinit var recyclerView: RecyclerView
+//lateinit var recyclerView: RecyclerView
 val propertyNearbyPointOfInterests =  mutableListOf<String>()
 lateinit var chipSchool: Chip
 lateinit var chipShops: Chip
@@ -133,13 +135,17 @@ class AddPropertyFragment : Fragment() {
         tvAddress = v.findViewById(R.id.tv_property_address)
         tvNearbyPointOfInterest = v.findViewById(R.id.property_nearby_points_of_interest_tv)
         tvEmailOfRealEstateAgent = v.findViewById(R.id.property_email_of_real_estate_agent_tv)
-        recyclerView = v.findViewById(R.id.recyclerview)
+       val recyclerView : RecyclerView = v.findViewById(R.id.recyclerview_add)
 
         val factory = PropertyViewModelFactory(this.activity as FragmentActivity)
         propertyViewModel = ViewModelProvider(this, factory).get(PropertyViewModel::class.java)
 
+        val factoryPicture = PictureViewModelFactory(this.activity as FragmentActivity)
+        pictureViewModel = ViewModelProvider(this, factoryPicture).get(PictureViewModel::class.java)
+
         tvEmailOfRealEstateAgent.text= "Email of agent : $userEmail"
-        addPropertyUtils = AddPropertyUtils(propertyViewModel, this.activity as FragmentActivity, recyclerView)
+        addPropertyUtils = AddPropertyUtils(propertyViewModel,
+            pictureViewModel, this.activity as FragmentActivity, recyclerView)
 
         addPropertyUtils.verifyStoragePermissions(this.activity)
 

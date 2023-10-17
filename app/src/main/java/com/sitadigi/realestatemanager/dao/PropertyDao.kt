@@ -21,4 +21,8 @@ interface PropertyDao {
 
         @Query("SELECT property_id from Property_table order by property_id DESC limit 1")
         suspend fun getLastId(): Int
+
+        @Query("SELECT COUNT (*) from Property_table")
+        suspend fun countPropertyTable(): Int
+
 }

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/recyclerview_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -41,7 +41,7 @@
         android:textSize="24dp"
         android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerview" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerview_detail" />
     <ScrollView
         android:id="@+id/scroller_detail_activity"
         android:layout_width="match_parent"
@@ -53,19 +53,19 @@
         app:layout_constraintTop_toBottomOf="@+id/description_title_tv">
 
     <TextView
-        android:id="@+id/text_view_id"
+        android:id="@+id/description_content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="description description description description description
         description description description description description description description
         description description description "
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_detail"
         />
     </ScrollView>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_room_detail"
+        android:id="@+id/property_nb_room_detail_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
@@ -75,10 +75,10 @@
         android:hint="Number of rooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_surface_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/property_surface_detail_tv" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_surface_detail"
+        android:id="@+id/property_surface_detail_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
@@ -90,7 +90,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroller_detail_activity" />
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_bathroom"
+        android:id="@+id/property_nb_bathroom_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
@@ -100,9 +100,9 @@
         android:hint="Number of bathrooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_room_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_room_detail_tv" />
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_bedroom"
+        android:id="@+id/property_nb_bedroom_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
@@ -112,7 +112,7 @@
         android:hint="Number of bedrooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_bathroom" />
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_bathroom_tv" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_property_location"
@@ -125,7 +125,7 @@
         android:hint="Location"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_bedroom" />
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_bedroom_tv" />
 
 
     <fragment

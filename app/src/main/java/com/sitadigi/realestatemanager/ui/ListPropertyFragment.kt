@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sitadigi.realestatemanager.R
+import com.sitadigi.realestatemanager.dao.PictureDao
 import com.sitadigi.realestatemanager.dao.PropertyDao
 import com.sitadigi.realestatemanager.database.UserDatabase
+import com.sitadigi.realestatemanager.model.Picture
 import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
 import kotlinx.coroutines.CoroutineScope
@@ -33,13 +35,16 @@ class ListPropertyFragment : Fragment() {
     private var param2: String? = null
 
     private var properties = listOf<Property>()
+    private var pictures = listOf<Picture>()
     private val viewModelJob = SupervisorJob()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private lateinit var propertyDao: PropertyDao
+    private lateinit var pictureDao: PictureDao
     lateinit var recyclerView: RecyclerView
     lateinit var custom: PropertyRecyclerViewCustom
      var mConfig :String?=""
     val CONFIG = "CONFIG"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,23 +60,46 @@ class ListPropertyFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_list_property, container, false)
 
-        recyclerView = v.findViewById(R.id.recyclerview)
+        recyclerView = v.findViewById(R.id.recyclerview_list)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
         if(this.context !=null) {
             propertyDao = UserDatabase.getInstance(this.context)?.propertyDao!!
+            pictureDao = UserDatabase.getInstance(this.context)?.pictureDao!!
             custom = PropertyRecyclerViewCustom(this.requireContext(),null,0)
 
         }
+
 
         //initRecyclerView()
         uiScope.launch {
 
 
             properties = propertyDao.getAllProperty()
+            pictures = pictureDao.getAllPicture()
 
 
-            val adapter = PropertyRecyclerviewAdapter(properties,custom, activity!!,mConfig)
+            for (p in properties) {
+                val propertyId = p.id
+                for(pict in pictures) {
+
+                    if (p.id == pict.id) {
+
+                    }
+                }
+            }
+
+          /*  var picturesInter = listOf<Picture>()
+            for(p in pictures ){
+                if(p.fkPropertyId == properties.get()){
+                    picturesInter.add
+                }
+
+            }*/
+
+
+
+            val adapter = PropertyRecyclerviewAdapter(properties,/*pictures,*/custom, activity!!,mConfig)
             // adapter.setClickListener(this)
             recyclerView.adapter = adapter
         }
@@ -85,9 +113,13 @@ class ListPropertyFragment : Fragment() {
 
         uiScope.launch {
             properties = propertyDao.getAllProperty()
+           // pictures = pictureDao.getAllPicture()
+            for (p in properties) {
+                val propertyId = p.id
+                pictures = pictureDao.getListOfPictureByFkId(propertyId)
+            }
 
-
-            val adapter = PropertyRecyclerviewAdapter(properties,custom, activity!!,mConfig)
+            val adapter = PropertyRecyclerviewAdapter(properties,/*pictures,*/custom, activity!!,mConfig)
             // adapter.setClickListener(this)
             recyclerView.adapter = adapter
         }

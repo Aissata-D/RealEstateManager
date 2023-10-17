@@ -1,4 +1,4 @@
-package com.sitadigi.realestatemanager.ui
+package com.sitadigi.realestatemanager.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.sitadigi.realestatemanager.model.Property
@@ -22,4 +22,10 @@ class PropertyViewModel(private val propertyRepository: PropertyRepository): Vie
     suspend fun getLastId(): Int{
         return propertyRepository.getLastId()
     }
+
+    suspend fun  countPropertyTable(): Int{
+        return propertyRepository. countPropertyTable()
+    }
+
+
 }

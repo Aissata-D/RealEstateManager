@@ -1,14 +1,7 @@
 package com.sitadigi.realestatemanager.repository
 
-import android.content.Context
-import android.graphics.Bitmap
-import androidx.lifecycle.LiveData
-import androidx.room.Database
 import com.sitadigi.realestatemanager.dao.PictureDao
-import com.sitadigi.realestatemanager.dao.StatusDao
-import com.sitadigi.realestatemanager.database.UserDatabase
 import com.sitadigi.realestatemanager.model.Picture
-import com.sitadigi.realestatemanager.model.Status
 
 class PictureRepository(private val dao: PictureDao) {
     suspend fun getAllPicture(): List<Picture> {
@@ -22,6 +15,14 @@ class PictureRepository(private val dao: PictureDao) {
     suspend fun getPictureById(id: Int): Picture? {
         return dao.getPictureById(id)
     }
+    suspend fun getPictureLastId(): Int {
+        return dao.getPictureLastId()
+    }
+
+    suspend fun getListOfPictureByFkId(fk_id : Int): List<Picture> {
+        return dao.getListOfPictureByFkId(fk_id)
+    }
+
    /* fun setImage(img: Bitmap) {
         val dao = UserDatabase.getInstance(context).PictureDao()
         val picture = Picture()

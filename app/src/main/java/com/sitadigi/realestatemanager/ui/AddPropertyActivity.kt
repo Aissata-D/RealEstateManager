@@ -1,10 +1,7 @@
 package com.sitadigi.realestatemanager.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +16,6 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -29,6 +25,9 @@ import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.R
 import com.sitadigi.realestatemanager.utils.AddPropertyUtils
+import com.sitadigi.realestatemanager.viewModel.PictureViewModel
+import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
+import com.sitadigi.realestatemanager.viewModelFactory.PictureViewModelFactory
 import com.sitadigi.realestatemanager.viewModelFactory.PropertyViewModelFactory
 import java.util.*
 
@@ -38,6 +37,7 @@ class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interface
     var userEmail = ""
     lateinit  var propertyLocality: String
     lateinit var addPropertyUtils: AddPropertyUtils
+    private lateinit var pictureViewModel: PictureViewModel
     private lateinit var propertyViewModel: PropertyViewModel
 
     private val OPEN_GALLERY = "OPEN_GALLERY"
@@ -93,13 +93,16 @@ class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interface
         tvAddress = findViewById(R.id.tv_property_address)
         tvNearbyPointOfInterest = findViewById(R.id.property_nearby_points_of_interest_tv)
         tvEmailOfRealEstateAgent = findViewById(R.id.property_email_of_real_estate_agent_tv)
-        recyclerView = findViewById(R.id.recyclerview)
+        recyclerView = findViewById(R.id.recyclerview_add)
 
         val factory = PropertyViewModelFactory(this)
+        val factoryPicture = PictureViewModelFactory(this)
+
+        pictureViewModel = ViewModelProvider( this,factoryPicture).get(PictureViewModel::class.java)
         propertyViewModel = ViewModelProvider(this, factory).get(PropertyViewModel::class.java)
 
         tvEmailOfRealEstateAgent.text= "Email of agent : $userEmail"
-        addPropertyUtils = AddPropertyUtils(propertyViewModel, this, recyclerView)
+        addPropertyUtils = AddPropertyUtils(propertyViewModel, pictureViewModel,this, recyclerView)
 
         addPropertyUtils.verifyStoragePermissions(this)
 

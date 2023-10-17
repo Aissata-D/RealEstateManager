@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.DetailsPropertyFragment"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
+    >
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -10,18 +20,21 @@
         tools:context=".ui.DetailsPropertyFragment"
         android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/framLayout_add_meeting"
-        android:name="fr.sitadigi.mareu.ui.ListMailFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:textSize="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Media"
+        />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/recyclerview_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -29,12 +42,11 @@
         android:layout_margin="4dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/media"
         app:layout_constraintStart_toStartOf="parent"
         tools:itemCount="10"
         tools:listitem="@layout/item_add_image" />
-
     <TextView
         android:id="@+id/description_title_tv"
         android:layout_width="wrap_content"
@@ -44,7 +56,7 @@
         android:textSize="24dp"
         android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerview" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerview_detail" />
     <ScrollView
         android:id="@+id/scroller_detail_activity"
         android:layout_width="match_parent"
@@ -56,96 +68,146 @@
         app:layout_constraintTop_toBottomOf="@+id/description_title_tv">
 
         <TextView
-            android:id="@+id/text_view_id"
+            android:id="@+id/description_content_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="description description description description description
         description description description description description description description
         description description description "
-            app:layout_constraintTop_toBottomOf="@+id/recyclerview"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerview_detail"
             />
     </ScrollView>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_room_detail"
+        android:id="@+id/property_nb_room_detail_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_home_24"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="left"
         android:hint="Number of rooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_surface_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/property_surface_detail_tv" />
 
+    <TextView
+        android:id="@+id/number_of_room_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:hint="number of room 8 "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_room_detail_tv"
+        />
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_surface_detail"
+        android:id="@+id/property_surface_detail_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_square_24"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="left"
         android:hint="Surface"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scroller_detail_activity" />
+        app:layout_constraintTop_toBottomOf="@+id/number_of_room_content_tv" />
+    <TextView
+        android:id="@+id/surface_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:hint="surface 8 "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_surface_detail_tv"
+        />
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_bathroom"
+        android:id="@+id/property_nb_bathroom_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_hot_tub_24"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="left"
         android:hint="Number of bathrooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_room_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/surface_content_tv" />
+
+    <TextView
+        android:id="@+id/bathroom_content_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:hint="bathroom 8 "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_bathroom_tv"
+        />
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_property_nb_bedroom"
+        android:id="@+id/property_nb_bedroom_tv"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_bedroom_parent_24"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="left"
         android:hint="Number of bedrooms"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_bathroom" />
+        app:layout_constraintTop_toBottomOf="@+id/bathroom_content_tv" />
+
+    <TextView
+        android:id="@+id/bedroom_content_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:hint="bedroom 8 "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_nb_bedroom_tv"
+        />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_property_location"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_my_location_24"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="left"
         android:hint="Location"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_nb_bedroom" />
-    <ImageView
-        android:id="@+id/map_detail_imv"
-        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/bedroom_content_tv" />
+    <TextView
+        android:id="@+id/location_content_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_marginStart="32dp"
+        android:hint="location 8 "
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_property_location"
         />
+
 
     <fragment
         android:id="@+id/detail_map_fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_property_location"
+        android:layout_marginTop="8dp"
         map:uiZoomControls="true"
         map:uiRotateGestures="true"
         map:cameraTilt="30"
+        app:layout_constraintTop_toBottomOf="@+id/location_content_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
 </LinearLayout>
+</ScrollView>

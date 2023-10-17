@@ -17,6 +17,12 @@ interface PictureDao {
     @Query("SELECT * FROM Picture_table WHERE picture_id LIKE :id")
     suspend fun getPictureById(id: Int): Picture?
 
+    @Query("SELECT picture_id FROM Picture_table ORDER BY picture_id DESC LIMIT 1")
+    suspend fun getPictureLastId(): Int
+
+    @Query("SELECT * FROM Picture_table WHERE fk_property_id LIKE :fk_id")
+    suspend fun getListOfPictureByFkId(fk_id : Int): List<Picture>
+
 
 
 

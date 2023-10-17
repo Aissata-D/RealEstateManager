@@ -21,4 +21,9 @@ class PropertyRepository(private val dao: PropertyDao) {
     suspend fun getLastId(): Int{
         return dao.getLastId()
     }
+
+    suspend fun countPropertyTable(): Int{
+        return dao.countPropertyTable()
+    }
+
 }

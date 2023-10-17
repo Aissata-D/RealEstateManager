@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sitadigi.realestatemanager.database.UserDatabase
 import com.sitadigi.realestatemanager.repository.PropertyRepository
-import com.sitadigi.realestatemanager.ui.PropertyViewModel
+import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
 
 class PropertyViewModelFactory(activity: Activity) : ViewModelProvider.Factory{
 

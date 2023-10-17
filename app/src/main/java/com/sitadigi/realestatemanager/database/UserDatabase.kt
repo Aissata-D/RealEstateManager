@@ -15,6 +15,8 @@ import com.sitadigi.realestatemanager.model.Property
 
 import com.sitadigi.realestatemanager.model.Status
 import com.sitadigi.realestatemanager.model.UserEntity
+import com.sitadigi.realestatemanager.ui.editNumberOfBathRooms
+import com.sitadigi.realestatemanager.ui.editPropertyType
 import com.sitadigi.realestatemanager.utils.Converters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @Database(entities = [UserEntity::class, Status::class, Picture::class, Property::class],
-        version = 8, exportSchema = false)
+        version = 10, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class UserDatabase : RoomDatabase() {
 
@@ -57,7 +59,7 @@ abstract class UserDatabase : RoomDatabase() {
                             instance = Room.databaseBuilder(
                                     context.applicationContext,
                                     UserDatabase::class.java,
-                                    "database13"
+                                    "database16"
                             ).addCallback(prepopulateDatabase())
                                     .build()
                         }

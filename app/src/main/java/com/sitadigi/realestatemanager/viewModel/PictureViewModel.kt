@@ -17,4 +17,13 @@ class PictureViewModel(private val pictureRepository: PictureRepository): ViewMo
     suspend fun getPictureById(id: Int): Picture? {
         return pictureRepository.getPictureById(id)
     }
+    suspend fun getPictureLastId(): Int {
+        return pictureRepository.getPictureLastId()
+    }
+
+    suspend fun getListOfPictureByFkId(fk_id : Int): List<Picture> {
+        return pictureRepository.getListOfPictureByFkId(fk_id)
+    }
+
+
 }

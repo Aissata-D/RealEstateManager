@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
@@ -15,8 +19,17 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.R
+import com.sitadigi.realestatemanager.dao.PictureDao
+import com.sitadigi.realestatemanager.database.UserDatabase
+import com.sitadigi.realestatemanager.model.Picture
+import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,17 +43,49 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DetailsPropertyFragment : Fragment(), OnMapReadyCallback {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var description_title_tv: TextView
+    lateinit var description_tv: TextView
+    lateinit var property_nb_room_detail_tv: MaterialTextView
+    lateinit var property_surface_detail_tv: MaterialTextView
+    lateinit var property_nb_bathroom_tv : MaterialTextView
+    lateinit var property_nb_bedroom_tv: MaterialTextView
+    lateinit var recyclerView : RecyclerView
+
+
+    var description =""
+    var numberOfRooms = 0
+    var numberOfBathRooms = 0
+    var numberOfBedRooms = 0
+    var surface = 0
+    var property_id =0
+
+    val DESCRIPTION = "DESCRIPTION"
+    val NUMBER_OF_ROOMS = "NUMBER_OF_ROOMS"
+    val NUMBER_OF_BATH_ROOMS = "NUMBER_OF_BATH_ROOMS"
+    val NUMBER_OF_BED_ROOMS = "NUMBER_OF_BED_ROOMS"
+    val SURFACE = "SURFACE"
+    var  listOfPhoto: ArrayList<String>? = null
+    val PROPERTY_ID = "PROPERTY_ID"
+
+    private lateinit var pictureDao: PictureDao
+    lateinit var mPictureList : List<Picture>
 
     //lateinit var imgDetailMap: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // listOfPhoto = ArrayList()
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+            surface = it.getInt(SURFACE)
+            description = it.getString(DESCRIPTION, "NO DESCRIPTION")
+            numberOfRooms = it.getInt(NUMBER_OF_ROOMS)
+            numberOfBathRooms = it.getInt(NUMBER_OF_BATH_ROOMS)
+            numberOfBedRooms = it.getInt(NUMBER_OF_BED_ROOMS)
+
+            listOfPhoto = it.getStringArrayList("PHOTO")
+            property_id = it.getInt(PROPERTY_ID)
+
         }
     }
 
@@ -48,18 +93,56 @@ class DetailsPropertyFragment : Fragment(), OnMapReadyCallback {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
        val view= inflater.inflate(R.layout.fragment_details_property, container, false)
-    //    imgDetailMap = view.findViewById(R.id.map_detail_imv)
 
-       //val mapFragment1 = supportFragmentManager.findFragmentById(R.id.detail_map_fragment) as? SupportMapFragment
-       // mapFragment?.getMapAsync(this)
 
-        val mapFragment = fragmentManager?.findFragmentById(R.id.detail_map_fragment) as MapFragment?
+       // val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        // Set callback on the fragment
+        //mapFragment.getMapAsync(this)
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.detail_map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        configureDetailView()
+        description_title_tv = view.findViewById(R.id.description_title_tv)
+        property_nb_room_detail_tv = view.findViewById(R.id.property_nb_room_detail_tv)
+        description_tv = view.findViewById(R.id.description_content_tv)
+        property_surface_detail_tv = view.findViewById(R.id.property_surface_detail_tv)
+        property_nb_bathroom_tv = view.findViewById(R.id.property_nb_bathroom_tv)
+        property_nb_bedroom_tv = view.findViewById(R.id.property_nb_bedroom_tv)
+        recyclerView = view.findViewById(R.id.recyclerview_detail)
+        pictureDao = UserDatabase.getInstance(context)?.pictureDao!!
+        val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+        val custom = PropertyRecyclerViewCustom(this.requireContext(),null,0)
+        recyclerView.layoutManager =  LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL,false)
+
+        scope.launch {
+            mPictureList = pictureDao.getListOfPictureByFkId(property_id)
+
+        val adapter = DetailsPropertyImageRecylerviewAdapter(mPictureList,custom)
+        // adapter.setClickListener(this)
+        recyclerView.adapter = adapter
+        }
+
+     //   configureDetailView()
         return view
     }
+    override fun onMapReady(map: GoogleMap) {
+        val sydney = LatLng(45.763420, 4.834277)
+        val cameraPosition = CameraPosition.Builder()
+            .target(sydney)
+            .zoom(15f)
+            //.bearing(-30f)
+            //.tilt(15f)
+            .build()
+        map.addMarker(
+            MarkerOptions()
+                .position(sydney)
+                .title("Property location")
+        )
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
     fun configureDetailView() {
+
+        ////////////////////////////////////////////////////////////////////////////////
         val GOOGLE_MAP_KEY = BuildConfig.GOOGLE_MAPS_API_KEY
         val urlPart1: String = "https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=300x300&maptype=roadmap%20&markers=color:red%7Clabel:C%7C"
         val urlPart2: String = "40.718217,-73.998284"
@@ -102,21 +185,5 @@ class DetailsPropertyFragment : Fragment(), OnMapReadyCallback {
                 }
     }
 
-    override fun onMapReady(map: GoogleMap?) {
-        val sydney = LatLng(45.763420, 4.834277)
-        val cameraPosition = CameraPosition.Builder()
-            .target(sydney)
-            .zoom(15f)
-            //.bearing(-30f)
-            //.tilt(15f)
-            .build()
 
-
-        map?.addMarker(
-            MarkerOptions()
-                .position(sydney)
-                .title("Property location")
-        )
-        map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
 }

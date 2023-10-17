@@ -12,19 +12,48 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.R
+import com.sitadigi.realestatemanager.dao.PictureDao
+import com.sitadigi.realestatemanager.database.UserDatabase
+import com.sitadigi.realestatemanager.model.Picture
 import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 
-class PropertyRecyclerviewAdapter (private val mList: List<Property>, private val custom: PropertyRecyclerViewCustom,
+class PropertyRecyclerviewAdapter (private val mList: List<Property>
+/*,private val mPictureList: List<Picture>*/,
+                                   private val custom: PropertyRecyclerViewCustom,
                                    val fragmentActivity: FragmentActivity, val mConfig:String?) :
         RecyclerView.Adapter<PropertyRecyclerviewAdapter.ViewHolder>(){
+    var description =""
+    var numberOfRooms = 0
+    var numberOfBathRooms = 0
+    var numberOfBedRooms = 0
+    var surface = 0
+
+    val DESCRIPTION = "DESCRIPTION"
+    val NUMBER_OF_ROOMS = "NUMBER_OF_ROOMS"
+    val NUMBER_OF_BATH_ROOMS = "NUMBER_OF_BATH_ROOMS"
+    val NUMBER_OF_BED_ROOMS = "NUMBER_OF_BED_ROOMS"
+    val SURFACE = "SURFACE"
+    lateinit var picture: Picture
+    private lateinit var pictureDao: PictureDao
+    lateinit var mPictureList : List<Picture>
+
+
 
     val POSITION = "POSITION"
     val CONFIG = "CONFIG"
     val PHONE = "PHONE"
     val TABLET= "TABLET"
     var detailPropertyFragment: DetailsPropertyFragment? =null
+   lateinit  var listOfPhoto: ArrayList<String>
+     var bitmap: Bitmap? =null
+
         // create new views
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             // inflates the card_view_design view
@@ -32,7 +61,10 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_property, parent, false)
            // detailPropertyFragment=DetailsPropertyFragment()
+            pictureDao = UserDatabase.getInstance(parent.context)?.pictureDao!!
+            listOfPhoto = ArrayList()
 
+           // val scope = MainScope()
             return ViewHolder(view)
         }
 
@@ -44,13 +76,30 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
 
             // sets the image to the imageview from our itemHolder class
             //holder.imageView.setImageBitmap(getPictureBitmap(ItemsViewModel.propertyListOfPictures.get(0)))
-            val bitmap =loadImageFromFile(/*holder.itemPropertyImageView,*/ItemsViewModel.propertyListOfPictures.get(0))
+            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+            val propertyId = ItemsViewModel.id
+            scope.launch {
+
+                mPictureList = pictureDao.getListOfPictureByFkId(ItemsViewModel.id)
+            if(mPictureList.size > 0){
+                bitmap = loadImageFromFile(mPictureList.get(0).currentPhotoPath)
+                holder.customView.setText(mPictureList.get(0).description)
+                holder.customView.setImageBitmap(bitmap)
+            }
+
             holder.itemPropertyType.text = ItemsViewModel.propertyType
             holder.itemPropertyLocation.text = ItemsViewModel.propertyAddress
             holder.itemPropertyPrice.text = ItemsViewModel.propertyPrice.toString()
-            holder.customView.setImageBitmap(bitmap)
-            holder.customView.setText("toto")
 
+
+
+            description = ItemsViewModel.propertyDescription.toString()
+            numberOfRooms = ItemsViewModel.propertyNumberOfRooms
+            numberOfBathRooms = ItemsViewModel.propertyNumberOfBathRooms
+            numberOfBedRooms = ItemsViewModel.propertyNumberOfBedRooms
+            surface = ItemsViewModel.propertySurface
+        }
             // Clic on item in list ; Open Details of property clicked
            holder.itemView.setOnClickListener(View.OnClickListener { v ->
                 Toast.makeText(v.context, "ITEM CLIQUE", Toast.LENGTH_SHORT).show()
@@ -65,6 +114,13 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
                        val bundle = Bundle()
                        bundle.putInt(POSITION, position)
                        bundle.putString(CONFIG, PHONE)
+                       bundle.putInt(SURFACE, surface)
+                       bundle.putInt(NUMBER_OF_ROOMS, numberOfRooms)
+                       bundle.putInt(NUMBER_OF_BATH_ROOMS, numberOfBathRooms)
+                       bundle.putInt(NUMBER_OF_BED_ROOMS, numberOfBedRooms)
+                       bundle.putString(DESCRIPTION, description)
+                       bundle.putStringArrayList("PHOTO", listOfPhoto)
+                       bundle.putInt("PROPERTY_ID",propertyId )// A RECUPERER
                        detailPropertyFragment!!.setArguments(bundle)
                       // if(fragmentActivity.findFr(R.id.framLayout_detail_or_add_property)==null){
 
@@ -87,14 +143,22 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>, private va
                    val bundle = Bundle()
                    bundle.putInt(POSITION, position)
                    bundle.putString(CONFIG, TABLET)
+                   bundle.putInt(SURFACE, surface)
+                   bundle.putInt(NUMBER_OF_ROOMS, numberOfRooms)
+                   bundle.putInt(NUMBER_OF_BATH_ROOMS, numberOfBathRooms)
+                   bundle.putInt(NUMBER_OF_BED_ROOMS, numberOfBedRooms)
+                   bundle.putString(DESCRIPTION, description)
+                   bundle.putStringArrayList("PHOTO", listOfPhoto)
+                   bundle.putInt("PROPERTY_ID",propertyId )
+
                    detailPropertyFragment!!.setArguments(bundle)
                    transaction.replace(R.id.framLayout_detail_or_add_property, detailPropertyFragment!!)
                } else {
                    transaction.show(detailPropertyFragment!!)
                }
 
-               transaction.addToBackStack("detailMeetingFragment") //if written, this transaction will be added to backstack
-
+             //  transaction.addToBackStack("detailMeetingFragment") //if written, this transaction will be added to backstack
+            //   transaction.addToBackStack(null)
                transaction.commit()
 
         })

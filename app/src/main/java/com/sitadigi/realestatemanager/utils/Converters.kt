@@ -5,6 +5,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflec
 import com.google.gson.Gson
 import com.sitadigi.realestatemanager.model.Picture
 import com.sitadigi.realestatemanager.model.PictureInter
+import com.sitadigi.realestatemanager.model.PictureOfProperty
 import org.w3c.dom.Comment
 import java.util.*
 
@@ -32,6 +33,7 @@ class Converters {
         return gson.toJson(value, type)
     }
 
+
     @TypeConverter
     fun toGroupTaskMemberList1(value: String): List<PictureInter> {
         val gson = Gson()
@@ -49,6 +51,24 @@ class Converters {
     fun toGroupTaskMemberList2(value: String): List<String> {
         val gson = Gson()
         val type = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun fromGroupTaskMemberList3(value: List<PictureOfProperty>): String {
+        val gson = Gson()
+        val type = object : TypeToken<List<PictureOfProperty>>() {}.type
+        return gson.toJson(value, type)
+    }
+
+
+
+
+
+    @TypeConverter
+    fun toGroupTaskMemberList3(value: String): List<PictureOfProperty> {
+        val gson = Gson()
+        val type = object : TypeToken<List<PictureOfProperty>>() {}.type
         return gson.fromJson(value, type)
     }
 
