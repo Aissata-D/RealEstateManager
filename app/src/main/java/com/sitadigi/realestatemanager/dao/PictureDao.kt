@@ -23,6 +23,11 @@ interface PictureDao {
     @Query("SELECT * FROM Picture_table WHERE fk_property_id LIKE :fk_id")
     suspend fun getListOfPictureByFkId(fk_id : Int): List<Picture>
 
+    @Query("DELETE  FROM Picture_table WHERE picture_id LIKE :id")
+    suspend fun deletePictureById(id : Int)
+
+
+
 
 
 

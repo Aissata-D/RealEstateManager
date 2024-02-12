@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 /**
@@ -41,9 +42,9 @@ data class Property(
         @ColumnInfo(name = "property_description")
         val propertyDescription: String,
         @ColumnInfo(name = "property_address")
-        val propertyAddress: String,
+        val propertyAddress: String?,
         @ColumnInfo(name = "property_nearby_points_of_interest")
-        val propertyNearbyPointsOfInterest: List<String>,
+        val propertyNearbyPointsOfInterest: MutableList<String>,
         @ColumnInfo(name = "property_date_of_register")
         val propertyDateOfRegister: Date?,
         @ColumnInfo(name = "property_date_of_sale")
@@ -52,6 +53,13 @@ data class Property(
         val propertyStatusId: Int,
         @ColumnInfo(name = "property_email_of_real_estate_agent")
         val propertyEmailOfRealEstateAgent: String,
+        @ColumnInfo(name = "property_adresse_complete")
+        val propertyAdresseComplete: String?,
+        @ColumnInfo(name = "property_latlng")
+        val propertyLatLng: LatLng?,
+        @ColumnInfo(name = "property_locality")
+        val propertyLocality: String
+
         //@ColumnInfo(name = "property_picture_id")
         //val propertyPictureId: Int
       //  @ColumnInfo(name = "property_list_of_pictures")

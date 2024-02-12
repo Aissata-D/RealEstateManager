@@ -59,7 +59,7 @@ abstract class UserDatabase : RoomDatabase() {
                             instance = Room.databaseBuilder(
                                     context.applicationContext,
                                     UserDatabase::class.java,
-                                    "database16"
+                                    "database17"
                             ).addCallback(prepopulateDatabase())
                                     .build()
                         }

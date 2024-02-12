@@ -17,6 +17,7 @@ import com.sitadigi.realestatemanager.database.UserDatabase
 import com.sitadigi.realestatemanager.model.Picture
 import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.utils.PropertyRecyclerViewCustom
+import com.sitadigi.realestatemanager.viewModel.UpdateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -34,6 +35,7 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
     var numberOfBathRooms = 0
     var numberOfBedRooms = 0
     var surface = 0
+    var mPosition :Int = 0
 
     val DESCRIPTION = "DESCRIPTION"
     val NUMBER_OF_ROOMS = "NUMBER_OF_ROOMS"
@@ -72,13 +74,15 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-            val ItemsViewModel = mList[position]
+            val ItemsViewModel = mList.get(position)
+            mPosition = holder.getAdapterPosition()
 
             // sets the image to the imageview from our itemHolder class
             //holder.imageView.setImageBitmap(getPictureBitmap(ItemsViewModel.propertyListOfPictures.get(0)))
             val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-            val propertyId = ItemsViewModel.id
+            val propertyId:Int = ItemsViewModel.id
+            val propertyLocality : String = ItemsViewModel.propertyLocality
             scope.launch {
 
                 mPictureList = pictureDao.getListOfPictureByFkId(ItemsViewModel.id)
@@ -94,7 +98,8 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
 
 
 
-            description = ItemsViewModel.propertyDescription.toString()
+            description = ItemsViewModel.propertyDescription
+           // description = mList.get(propertyId).propertyDescription
             numberOfRooms = ItemsViewModel.propertyNumberOfRooms
             numberOfBathRooms = ItemsViewModel.propertyNumberOfBathRooms
             numberOfBedRooms = ItemsViewModel.propertyNumberOfBedRooms
@@ -107,12 +112,15 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
                val transaction = fragmentManager.beginTransaction()
 
                if (mConfig !== TABLET) {
+                    val viewModel= UpdateViewModel()
+                       viewModel.setPropertyIdToUpdate(propertyId)
+
                   // position = holder.getAdapterPosition()
                    if (detailPropertyFragment == null) {
                        detailPropertyFragment = DetailsPropertyFragment()
                        // Put Meeting position in a detailMeetingFragment
                        val bundle = Bundle()
-                       bundle.putInt(POSITION, position)
+                       bundle.putInt(POSITION, mPosition)
                        bundle.putString(CONFIG, PHONE)
                        bundle.putInt(SURFACE, surface)
                        bundle.putInt(NUMBER_OF_ROOMS, numberOfRooms)
@@ -121,6 +129,8 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
                        bundle.putString(DESCRIPTION, description)
                        bundle.putStringArrayList("PHOTO", listOfPhoto)
                        bundle.putInt("PROPERTY_ID",propertyId )// A RECUPERER
+                       bundle.putString("PROPERTY_LOCALITY",propertyLocality )// A RECUPERER
+                       //bundle.putInt(mPosition,position )// A RECUPERER
                        detailPropertyFragment!!.setArguments(bundle)
                       // if(fragmentActivity.findFr(R.id.framLayout_detail_or_add_property)==null){
 
@@ -128,6 +138,8 @@ class PropertyRecyclerviewAdapter (private val mList: List<Property>
                        transaction.replace(R.id.framLayout_list_property, detailPropertyFragment!!)
                    } //give your fragment container id in first parameter
                    else {
+                       val viewModel= UpdateViewModel()
+                       viewModel.setPropertyIdToUpdate(propertyId)
                        transaction.show(detailPropertyFragment!!)
                        /*  val bundle = Bundle()
                          bundle.putInt(POSITION, position)

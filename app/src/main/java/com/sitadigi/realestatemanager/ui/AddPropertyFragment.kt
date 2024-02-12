@@ -1,13 +1,17 @@
 package com.sitadigi.realestatemanager.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +26,7 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -30,12 +35,16 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.sitadigi.realestatemanager.BuildConfig
 import com.sitadigi.realestatemanager.R
+import com.sitadigi.realestatemanager.model.PictureInter
 import com.sitadigi.realestatemanager.utils.AddPropertyUtils
 import com.sitadigi.realestatemanager.viewModel.PictureViewModel
 import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
 import com.sitadigi.realestatemanager.viewModelFactory.PictureViewModelFactory
 import com.sitadigi.realestatemanager.viewModelFactory.PropertyViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Date
+//import  com.sitadigi.realestatemanager.utils.AddPropertyUtils
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,13 +52,13 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 var userEmail = ""
-lateinit  var propertyLocality: String
+//lateinit  var propertyLocality: String
 lateinit var addPropertyUtils: AddPropertyUtils
-private lateinit var propertyViewModel: PropertyViewModel
-private lateinit var pictureViewModel: PictureViewModel
+lateinit var propertyViewModel: PropertyViewModel
+lateinit var pictureViewModel: PictureViewModel
 
-private val OPEN_GALLERY = "OPEN_GALLERY"
-private val OPEN_CAMERA = "OPEN_CAMERA"
+val OPEN_GALLERY = "OPEN_GALLERY"
+val OPEN_CAMERA = "OPEN_CAMERA"
 lateinit var fabAddPictureFromGallery: ExtendedFloatingActionButton
 lateinit var fabTakePhotoWithCamera: FloatingActionButton
 lateinit var btnAddProperty: Button
@@ -59,7 +68,7 @@ lateinit var editPropertySurface: TextInputEditText
 lateinit var editNumberOfBathRooms: TextInputEditText
 lateinit var editNumberOfBedRooms: TextInputEditText
 lateinit var editNumberOfRooms: TextInputEditText
-private lateinit var editDescription: TextInputEditText
+lateinit var editDescription: TextInputEditText
 lateinit var tvAddress: MaterialTextView
 lateinit var tvNearbyPointOfInterest: MaterialTextView
 lateinit var tvEmailOfRealEstateAgent: MaterialTextView
@@ -105,13 +114,11 @@ class AddPropertyFragment : Fragment() {
         // Inflate the layout for this fragment
        val v = inflater.inflate(R.layout.fragment_add_property, container, false)
 
-
-
-
         val bundle = this.arguments// intent.extras
 
         if (bundle != null) {
             val s = bundle["USER_EMAIL"] as String?
+            val localityAdd = bundle["USER_EMAIL"] as String?
             if (s != null) {
                 userEmail = s
                 Log.e("TAG", "onCreateAddActivity: email: $userEmail bundle: $bundle" )
@@ -145,7 +152,7 @@ class AddPropertyFragment : Fragment() {
 
         tvEmailOfRealEstateAgent.text= "Email of agent : $userEmail"
         addPropertyUtils = AddPropertyUtils(propertyViewModel,
-            pictureViewModel, this.activity as FragmentActivity, recyclerView)
+            pictureViewModel, this.activity as FragmentActivity, recyclerView,tvAddress)
 
         addPropertyUtils.verifyStoragePermissions(this.activity)
 
@@ -174,8 +181,9 @@ class AddPropertyFragment : Fragment() {
 
                 }}
 
-            addPropertyUtils.clickOnAddPropertyBtn(editPropertyType, editPropertyPrice, editPropertySurface, editNumberOfRooms,editNumberOfBedRooms,
-                editNumberOfBathRooms,editDescription, propertyLocality, propertyNearbyPointOfInterests, userEmail)
+            addPropertyUtils.clickOnAddPropertyBtn(editPropertyType, editPropertyPrice, editPropertySurface,
+                editNumberOfRooms,editNumberOfBedRooms,
+                editNumberOfBathRooms,editDescription,  propertyNearbyPointOfInterests, userEmail)
 
             Log.e("TAG", "onCreate: DATE : "+ Date() )
         }
@@ -235,7 +243,7 @@ class AddPropertyFragment : Fragment() {
 
             // Set the fields to specify which types of place data to
             // return after the user has made a selection.
-            val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS)
+            val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS, Place.Field.LAT_LNG)
 
             // Start the autocomplete intent.
             val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
@@ -257,13 +265,13 @@ class AddPropertyFragment : Fragment() {
         mResultCode = resultCode
         mData = data
 
-        addPropertyUtils.checkActivityResult(requestCode,resultCode, data)
+
 
         // Call callback to close addMeeting fragment and open ListMeeting Fragment
-        mCallback?.OnButtonClickedListener(view)
+       // mCallback?.OnButtonClickedListener(view)
 
 
-      /*  if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+     /*   if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     data?.let {
@@ -289,7 +297,10 @@ class AddPropertyFragment : Fragment() {
             mCallback?.OnButtonClickedListener(view)
             return
         }*/
-        super.onActivityResult(requestCode, resultCode, data)
+        addPropertyUtils.checkActivityResult(requestCode,resultCode, data)
+        mCallback?.OnButtonClickedListener(view)
+
+        //super.onActivityResult(requestCode, resultCode, data)
     }
 
     fun createCallbackToParentActivity() {
@@ -304,7 +315,7 @@ class AddPropertyFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        createCallbackToParentActivity()
+       // createCallbackToParentActivity()
     }
 
   /*  override fun  onAttach(context: Context?) {

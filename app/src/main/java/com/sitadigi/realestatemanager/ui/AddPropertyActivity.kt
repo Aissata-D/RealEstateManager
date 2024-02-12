@@ -70,8 +70,12 @@ class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interface
 
         if (bundle != null) {
             val s = bundle["USER_EMAIL"] as String?
+            val locality :String? = bundle.getString(PROPERTY_LOCALITY)
             if (s != null) {
                 userEmail = s
+
+                propertyLocalityUpdate = locality
+
                 Log.e("TAG", "onCreateAddActivity: email: $userEmail bundle: $bundle" )
 
             }
@@ -102,7 +106,7 @@ class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interface
         propertyViewModel = ViewModelProvider(this, factory).get(PropertyViewModel::class.java)
 
         tvEmailOfRealEstateAgent.text= "Email of agent : $userEmail"
-        addPropertyUtils = AddPropertyUtils(propertyViewModel, pictureViewModel,this, recyclerView)
+        addPropertyUtils = AddPropertyUtils(propertyViewModel, pictureViewModel,this, recyclerView,tvAddress)
 
         addPropertyUtils.verifyStoragePermissions(this)
 
@@ -132,7 +136,7 @@ class AddPropertyActivity : FragmentActivity() /*, AddPropertyFragment.interface
             }}
 
             addPropertyUtils.clickOnAddPropertyBtn(editPropertyType, editPropertyPrice, editPropertySurface, editNumberOfRooms,editNumberOfBedRooms,
-                editNumberOfBathRooms,editDescription, propertyLocality, propertyNearbyPointOfInterests, userEmail)
+                editNumberOfBathRooms,editDescription,  propertyNearbyPointOfInterests, userEmail)
 
             Log.e("TAG", "onCreate: DATE : "+Date() )
         }

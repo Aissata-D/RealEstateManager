@@ -23,6 +23,10 @@ class PictureRepository(private val dao: PictureDao) {
         return dao.getListOfPictureByFkId(fk_id)
     }
 
+    suspend fun deletePictureById(id : Int){
+        return dao.deletePictureById(id)
+    }
+
    /* fun setImage(img: Bitmap) {
         val dao = UserDatabase.getInstance(context).PictureDao()
         val picture = Picture()

@@ -1,5 +1,4 @@
 package com.sitadigi.realestatemanager.utils
-
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
@@ -33,6 +32,7 @@ import com.sitadigi.realestatemanager.model.Property
 import com.sitadigi.realestatemanager.ui.AUTOCOMPLETE_REQUEST_CODE
 import com.sitadigi.realestatemanager.ui.AddImageAdapter
 import com.sitadigi.realestatemanager.ui.MainActivity
+import com.sitadigi.realestatemanager.ui.propertyLocalityUpdate
 import com.sitadigi.realestatemanager.viewModel.PropertyViewModel
 
 import com.sitadigi.realestatemanager.viewModel.PictureViewModel
@@ -46,28 +46,29 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-
-class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, private val pictureViewModel : PictureViewModel,
-                       val activity: Activity?,
-                       private val recyclerView: RecyclerView,
-                        val tvAddressUtils: MaterialTextView?) {
+class UpdatePropertyUtils(private val propertyViewModel : PropertyViewModel
+                            , private val pictureViewModel : PictureViewModel,
+                          val activity: Activity?,
+                          private val recyclerView: RecyclerView,
+                          val tvAddressUtils: MaterialTextView?,val property_id: Int) {
 
     val picturesForInitUpdateProperty  = mutableListOf<Picture>()
-
+    val picturesToInsert  = mutableListOf<Picture>()
     var bitmap: Bitmap? = null
     private val viewModelJob = SupervisorJob()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private var pictureInters = mutableListOf<PictureInter>()
     private var pictureOfProperty = mutableListOf<String>()
+    private lateinit var pictureViewModelUpdate: PictureViewModel
     //lateinit var tvAddress: MaterialTextView
     var userEmail = ""
-     var propertyLocality: String  = "No locality"
+     var propertyLocality: String= "No Locality UP"
     lateinit var picture : Picture
     lateinit var currentPhotoPath: String
     private val REQUEST_EXTERNAL_STORAGE = 1
     private val PERMISSIONS_STORAGE = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
     val REQUEST_IMAGE_CAPTURE = 1
@@ -77,96 +78,109 @@ class AddPropertyUtils(private val propertyViewModel : PropertyViewModel, privat
     val OPEN_GALLERY = "OPEN_GALLERY"
     val OPEN_CAMERA = "OPEN_CAMERA"
 
-     var propertyLastId = 0
-     var propertyId = 0
-     var propertyLatLng: LatLng? = null
-     var propertyAdresseComplete: String? = null
-    var picturesListToAdd = mutableListOf<Picture>()
+    var propertyLastId = 0
+    var propertyId = 0
+    var propertyLatLng: LatLng? = null
+    var propertyAdresseComplete: String? = null
 
 
-     fun clickOnAddPropertyBtn(editPropertyType: TextInputEditText, editPropertyPrice:TextInputEditText,
-                               editPropertySurface:TextInputEditText, editNumberOfRooms:TextInputEditText,
-                               editNumberOfBedRooms:TextInputEditText
-                               , editNumberOfBathRooms:TextInputEditText,
-                               editDescription:TextInputEditText,
+    fun clickOnAddPropertyBtn(  property_id:Int  ,editPropertyType: TextInputEditText, editPropertyPrice:TextInputEditText,
+                              editPropertySurface:TextInputEditText, editNumberOfRooms:TextInputEditText,
+                              editNumberOfBedRooms:TextInputEditText
+                              , editNumberOfBathRooms:TextInputEditText,
+                              editDescription:TextInputEditText,
+                              editAddress:String?,
+        //tvNearbyPointOfInterest:MaterialTextView,
+                              propertyNearbyPointOfInterests: MutableList<String>,
+                              tvEmailOfRealEstateAgent: String){
 
-                                     //tvNearbyPointOfInterest:MaterialTextView,
-                               propertyNearbyPointOfInterests: MutableList<String>,
-                               tvEmailOfRealEstateAgent: String, editAddress:String? = propertyLocality){
 
         uiScope.launch {
-            for(p in picturesListToAdd){
+
+
+            for(p in picturesToInsert){
                 pictureViewModel.insert(p)
             }
 
+
             val propertyType = editPropertyType.text.toString()
             val propertyPrice = (editPropertyPrice.text.toString()).toDouble()
-            val propertySurface = (editPropertySurface.text).toString().toInt()
+            val propertySurface = (editPropertySurface.text.toString()).toInt()
             val propertyNumberOfRooms = (editNumberOfRooms.text.toString()).toInt()
             val propertyNumberOfBedRooms = (editNumberOfBedRooms.text.toString()).toInt()
             val propertyNumberOfBathRooms = (editNumberOfBathRooms.text.toString()).toInt()
             val propertyDescription = editDescription.text.toString()
-            val propertyAddress = editAddress
+            val propertyAddress :String? = editAddress
             //val propertyNearbyPointOfInterests =  mutableListOf<String>()//tvNearbyPointOfInterest.text.toString()
-           // val propertySpinnerEmailOfRealEstateAgent = tvEmailOfRealEstateAgent
+            // val propertySpinnerEmailOfRealEstateAgent = tvEmailOfRealEstateAgent
 
-           //
+            //
             //val pictureId = pictureViewModel.getPictureLastId()
 
-           // propertyLastId = propertyViewModel.getLastId()
-          //  propertyId = propertyLastId +1
+            // propertyLastId = propertyViewModel.getLastId()
+            //  propertyId = propertyLastId +1
 
-           // pictureViewModel.insert(picture)
+            // pictureViewModel.insert(picture)
+            // propertyLocality =  editAddress.
 
-            val property = Property(0,propertyType,propertyPrice,propertySurface
-                    ,propertyNumberOfRooms,propertyNumberOfBedRooms,propertyNumberOfBathRooms
-                    ,propertyDescription, propertyAddress,
-                    propertyNearbyPointOfInterests,Date(),null,
-                    1, tvEmailOfRealEstateAgent,propertyAdresseComplete,propertyLatLng, propertyLocality)
 
-            propertyViewModel.insert(property)
+            if(propertyLocality.isEmpty()){
+                propertyLocality =  propertyViewModel.getPropertyById(property_id).propertyLocality
+            }
+            if (propertyAdresseComplete==null){
+                propertyAdresseComplete = propertyViewModel.getPropertyById(property_id).propertyAdresseComplete
+            }
+            if(propertyLatLng == null){
+                propertyLatLng = propertyViewModel.getPropertyById(property_id).propertyLatLng
+            }
+
+
+            val property = Property(property_id,propertyType,propertyPrice,propertySurface
+                ,propertyNumberOfRooms,propertyNumberOfBedRooms,propertyNumberOfBathRooms
+                ,propertyDescription, propertyAddress,
+                propertyNearbyPointOfInterests,Date(),null,
+                1, tvEmailOfRealEstateAgent,propertyAdresseComplete,propertyLatLng, propertyLocality)
+
+            propertyViewModel.updatePropertyTable(property.id, property.propertyType,property.propertyPrice,property.propertySurface,
+                property.propertyNumberOfRooms,property.propertyNumberOfBedRooms,property.propertyNumberOfBathRooms,property.propertyDescription,
+                property.propertyAddress,property.propertyNearbyPointsOfInterest,property.propertyDateOfRegister,property.propertyDateOfSale,
+                property.propertyStatusId,property.propertyEmailOfRealEstateAgent,property.propertyAdresseComplete,property.propertyLatLng)
             Log.e("TAG", "onCreate: INSERT $property" )
+
+
 
             startMainActivity()
 
         }
 
-    initRecyclerView()
-}
+        initRecyclerView()
+    }
+    fun initListOfRecyclerViewInUpdateActivity(pictureByFkIdOfProperty: Int) {
+        // set up the RecyclerView
+        uiScope.launch {
+            picturesForInitUpdateProperty.addAll(pictureViewModel.getListOfPictureByFkId(pictureByFkIdOfProperty))
+            for(p in picturesForInitUpdateProperty){
+              //  pictureInters.add(PictureInter(p.description,p.currentPhotoPath,p.image))
+            //   initRecyclerView()
+            }
+            initRecyclerView()
 
- fun initRecyclerView(){
-    // set up the RecyclerView
-     uiScope.launch {
+        }
+    }
+    fun initRecyclerView(){
+        // set up the RecyclerView
 
-             if ((propertyViewModel.countPropertyTable() == 0)) {
-                 propertyId = 1
-             } else {
-                 propertyLastId = propertyViewModel.getLastId()
-                 propertyId = propertyLastId + 1
-             }
-         val numberOfColumns = 3
-         recyclerView.layoutManager =
-             GridLayoutManager(activity?.applicationContext, numberOfColumns)
-       //  var pictureToAdd = pictureViewModel.getListOfPictureByFkId(propertyId)
-        // picturesForInitUpdateProperty.clear()
+        val numberOfColumns = 3
+        recyclerView.layoutManager = GridLayoutManager(activity?.applicationContext, numberOfColumns)
+        val adapter = AddImageAdapter(picturesForInitUpdateProperty,pictureViewModel)
+        recyclerView.adapter = adapter
 
-     //    for(p in pictureToAdd){
-       //      picturesForInitUpdateProperty.add(p)
+    }
 
-      //   }
-
-         val adapter = AddImageAdapter(picturesListToAdd, pictureViewModel)
-
-         //val adapter = AddImageAdapter(pictureInters)
-         recyclerView.adapter = adapter
-     }
-
-}
-
-fun startMainActivity(){
-    val intent = Intent(activity, MainActivity::class.java)
-    activity?.startActivity(intent)
-}
+    fun startMainActivity(){
+        val intent = Intent(activity, MainActivity::class.java)
+        activity?.startActivity(intent)
+    }
 
     fun getPictureBitmap(image: ByteArray): Bitmap {
         val bitmap = BitmapFactory.decodeByteArray(image,0,image.size)
@@ -186,7 +200,7 @@ fun startMainActivity(){
         intentImg.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         val photoURI = FileProvider.getUriForFile(Objects.requireNonNull(activity?.applicationContext !! ),
-                BuildConfig.APPLICATION_ID + ".fileprovider", createImageFile())
+            BuildConfig.APPLICATION_ID + ".fileprovider", createImageFile())
         // intentImg.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
 
         //  intentImg.putExtra("outputFormat",Bitmap.CompressFormat.PNG.name)
@@ -204,8 +218,8 @@ fun startMainActivity(){
         takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         val photoURI = FileProvider.getUriForFile(Objects.requireNonNull(activity?.applicationContext
-                !! ),
-                BuildConfig.APPLICATION_ID + ".fileprovider", createImageFile())
+        !! ),
+            BuildConfig.APPLICATION_ID + ".fileprovider", createImageFile())
 
 
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -218,13 +232,13 @@ fun startMainActivity(){
     fun verifyStoragePermissions(activity: Activity?) {
         // Check if we have write permission
         val permission = ActivityCompat.checkSelfPermission(activity!!,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
+                activity,
+                PERMISSIONS_STORAGE,
+                REQUEST_EXTERNAL_STORAGE
             )
         }
     }
@@ -236,9 +250,9 @@ fun startMainActivity(){
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
@@ -271,22 +285,26 @@ fun startMainActivity(){
         val imageBytArray: ByteArray = getBytes(bitmap)
 
         uiScope.launch {
-            if ((propertyViewModel.countPropertyTable() == 0)) {
+
+
+           /* if ((propertyViewModel.countPropertyTable() == 0)) {// Pourquoi ça plante ici ?????
                 propertyId = 1
             } else {
                 propertyLastId = propertyViewModel.getLastId()
                 propertyId = propertyLastId + 1
-            }
+            }*/
 
-            picture = Picture(0, photoDescription, imageBytArray, currentPhotoPath, propertyId)
-           // picturesListToAdd.add(picture)
-            picturesListToAdd.add(picture)
+            picture = Picture(0, photoDescription, imageBytArray, currentPhotoPath, property_id)
 
-
+            picturesForInitUpdateProperty.add(picture)
+            picturesToInsert.add(picture)
+            initRecyclerView()
         }
 
-       // pictureInters.add(PictureInter(photoDescription,currentPhotoPath,imageBytArray))
-        //pictureOfProperty.add(currentPhotoPath)
+        pictureInters.add(PictureInter(photoDescription,currentPhotoPath,imageBytArray))
+        pictureOfProperty.add(currentPhotoPath)
+
+
         initRecyclerView()
         // view.setImageBitmap(bitmap)
     }
@@ -333,32 +351,38 @@ fun startMainActivity(){
             val imageBytArray: ByteArray = getBytes(bitmap)
             val file: File = File(currentPhotoPath)
             val fOut = FileOutputStream(file)
-           getPictureBitmap(imageBytArray).compress(Bitmap.CompressFormat.PNG, 85, fOut)
+            getPictureBitmap(imageBytArray).compress(Bitmap.CompressFormat.PNG, 85, fOut)
             fOut.flush()
             fOut.close()
 
-           /* pictureInters.add(PictureInter(photoDescription, currentPhotoPath,imageBytArray))
-            pictureOfProperty.add(currentPhotoPath)
-          // initRecyclerView()*/
+          //  pictureInters.add(PictureInter(photoDescription, currentPhotoPath,imageBytArray))
+           // pictureOfProperty.add(currentPhotoPath)
+            // initRecyclerView()
+
+
+
             uiScope.launch {
-                if ((propertyViewModel.countPropertyTable() == 0)) {
-                    propertyId = 1
-                } else {
-                    propertyLastId = propertyViewModel.getLastId()
-                    propertyId = propertyLastId + 1
-                }
 
-                picture = Picture(0, photoDescription, imageBytArray, currentPhotoPath, propertyId)
-                // picturesListToAdd.add(picture)
-                picturesListToAdd.add(picture)
 
-                val numberOfImage =picturesListToAdd.size
+                /* if ((propertyViewModel.countPropertyTable() == 0)) {// Pourquoi ça plante ici ?????
+                     propertyId = 1
+                 } else {
+                     propertyLastId = propertyViewModel.getLastId()
+                     propertyId = propertyLastId + 1
+                 }*/
+
+                picture = Picture(0, photoDescription, imageBytArray, currentPhotoPath, property_id)
+
+                picturesForInitUpdateProperty.add(picture)
+                picturesToInsert.add(picture)
                 initRecyclerView()
-                Toast.makeText(activity?.applicationContext,"$numberOfImage image add",Toast.LENGTH_SHORT).show()
+                val numberOfImage =picturesToInsert.size
 
+                Toast.makeText(activity?.applicationContext,"$numberOfImage image add",Toast.LENGTH_SHORT).show()
 
             }
 
+          //  initRecyclerView()
 
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == FragmentActivity.RESULT_OK) {
@@ -397,7 +421,7 @@ fun startMainActivity(){
                 }
             }
 
-           // mCallback?.OnButtonClickedListener(view)
+            // mCallback?.OnButtonClickedListener(view)
             return
         }
         initRecyclerView()

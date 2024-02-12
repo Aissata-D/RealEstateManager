@@ -25,5 +25,9 @@ class PictureViewModel(private val pictureRepository: PictureRepository): ViewMo
         return pictureRepository.getListOfPictureByFkId(fk_id)
     }
 
+    suspend fun deletePictureById(id : Int){
+        return pictureRepository.deletePictureById(id)
+    }
+
 
 }

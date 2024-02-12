@@ -13,5 +13,13 @@
         android:src="@drawable/img_property_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/img_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_delete_forever_24"
+        app:layout_constraintStart_toEndOf="@id/item_property_img"
+        app:layout_constraintTop_toTopOf="@id/item_property_img"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.sitadigi.realestatemanager.utils
 
 import androidx.room.TypeConverter
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.sitadigi.realestatemanager.model.Picture
@@ -71,7 +72,18 @@ class Converters {
         val type = object : TypeToken<List<PictureOfProperty>>() {}.type
         return gson.fromJson(value, type)
     }
-
+    @TypeConverter
+    fun toGroupTaskMemberList4(value: String): LatLng? {
+        val gson = Gson()
+        val type = object : TypeToken<LatLng>() {}.type
+        return gson.fromJson(value, type)
+    }
+    @TypeConverter
+    fun fromGroupTaskMemberList4(value: LatLng?): String {
+        val gson = Gson()
+        val type = object : TypeToken<LatLng>() {}.type
+        return gson.toJson(value, type)
+    }
 
 
     @TypeConverter
